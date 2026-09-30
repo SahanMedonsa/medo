@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "@/components/login-form";
 import FolderEditor from "@/components/folder-editor";
+import PdfTutes from "@/components/pdf-tutes";
 import VideoEditor from "@/components/video-editor";
 import { LessonFolder, VideoModule, Medium, contentMedium } from "@/lib/modules";
 import { BookOpen, FileClock, FileText, Info, MessageSquare, Search, X, Plus, FolderOpen, ArrowLeft, Award, Video, Phone, Send, ArrowUpRight } from "lucide-react";
@@ -182,10 +183,10 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
       </aside>
 
       <main className="main-content">
-        <h1 className="category-title">{activeFolder?.title ?? category}</h1>
+        {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? category}</h1>}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
         {notice && <p className="admin-message success" role="status">{notice}</p>}
-        {isCourse ? <>
+        {category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} /> : isCourse ? <>
           {activeFolder && <div className="folder-detail"><button className="secondary-button folder-back" onClick={() => { setActiveFolderId(null); setQuery(""); }}><ArrowLeft size={16} /> All lessons · {category}</button><p>{activeFolder.description}</p><div className="folder-stats"><span><Video size={17} /> {lessons.filter((item) => item.folder_id === activeFolder.id && contentMedium(item) === medium).length} {admin ? "videos added" : "videos available"} / {activeFolder.planned_videos} planned</span><span><Award size={17} /> {activeFolder.marks} marks available</span>{admin && <button className="secondary-button" onClick={() => setFolderEditor({ folder: activeFolder })}>Edit folder details</button>}</div></div>}
           <div className="catalog-toolbar"><span>{isTute ? "YouTube videos" : activeFolder ? "Videos in this lesson" : "Lesson folders"} · {category}</span><div className="catalog-controls">{admin && (activeFolder || isTute ? <button className="purchase-button add-video-button" onClick={() => setEditor({ lesson: null })}><Plus size={19} /> Add video</button> : <button className="purchase-button add-video-button" onClick={() => setFolderEditor({ folder: null })}><Plus size={19} /> Add lessons</button>)}<label className="lesson-search"><Search size={18} /><input aria-label="Search lessons" placeholder="Search lessons..." value={query} onChange={(event) => setQuery(event.target.value)} /></label></div></div>
           {!activeFolder && !isTute && <div className="lesson-grid folder-grid">{shownFolders.map((folder) => {

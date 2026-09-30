@@ -196,9 +196,18 @@ test("Drive listings save metadata and delete without touching Google Drive or F
     return Response.json({ name: "pdfs/" + uuid, fields: { ...encodeFields({ drive_url, title: "Tute", filename: "tute.pdf", size: 0 }), ...body.fields } });
   };
   const request = (method, body) => new Request("http://localhost:3000/api/pdfs", { method, headers: { Origin: "http://localhost:3000", "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  const response = await routes.POST(request("POST", { title: "Tute", description: "", drive_url, published: true }));
+  assert.equal((await routes.POST(request("POST", { title: "Tute", description: "", drive_url, published: true }))).status, 400);
+  const response = await routes.POST(request("POST", { folder_id: uuid, title: "Tute", description: "", drive_url, published: true }));
   assert.equal(response.status, 200);
   assert.equal((await response.json()).pdf.drive_url, drive_url);
+  const edited = await routes.PATCH(request("PATCH", { id: uuid, title: "Updated tute", description: "New notes", drive_url, published: false }));
+  assert.equal(edited.status, 200);
+  const updatedPdf = (await edited.json()).pdf;
+  assert.equal(updatedPdf.title, "Updated tute");
+  assert.equal(updatedPdf.description, "New notes");
+  assert.equal(updatedPdf.published, false);
+  assert.equal((await routes.PATCH(request("PATCH", { id: uuid, title: "", description: "", published: true }))).status, 400);
+  assert.equal((await routes.PATCH(request("PATCH", { id: uuid, title: "Tute", description: "", drive_url: "https://example.com/file.pdf", published: true }))).status, 400);
   assert.equal((await routes.DELETE(request("DELETE", { id: uuid }))).status, 200);
 });
 
@@ -242,4 +251,50 @@ test("API rejects videos assigned to a folder in another medium", async (t) => {
   const changeFolder = await admin.POST(post({ action: "save_folder", id: uuid, title: "Topic", description: "Notes", category: valid.category, medium: "si", planned_videos: 3, marks: 10 }));
   assert.equal(changeFolder.status, 400);
   assert.equal(writes, 1);
+});
+
+
+test("Tute folders validate names, grades and medium; preview links preserve resource keys", async () => {
+  const { validatePdfFolder, googleDrivePreviewUrl } = await import(await source("../src/lib/pdfs.ts"));
+  assert.deepEqual(validatePdfFolder({ name: " Algebra ", grade: " Grade 10 ", medium: "si" }), { name: "Algebra", grade: "Grade 10", medium: "si" });
+  for (const value of [null, {}, { name: " ", grade: "10", medium: "si" }, { name: "Test", grade: "", medium: "si" }, { name: "Test", grade: "10", medium: "bad" }]) assert.throws(() => validatePdfFolder(value));
+  assert.equal(googleDrivePreviewUrl("https://drive.google.com/file/d/abcdefghijklmnop/view?resourcekey=abc"), "https://drive.google.com/file/d/abcdefghijklmnop/preview?resourcekey=abc");
+});
+
+test("Folder API requires admin, saves metadata, and rejects missing parent folders", async (t) => {
+  const original = globalThis.fetch;
+  globalThis.testCookies = { get: () => undefined };
+  t.after(() => { globalThis.fetch = original; delete globalThis.testCookies; });
+  const pdfUrl = await source("../src/lib/pdfs.ts");
+  const routes = await import(await source("../src/app/api/pdf-folders/route.ts", { ...substitutions, '"@/lib/pdfs"': JSON.stringify(pdfUrl) }));
+  const request = (body) => new Request("http://localhost:3000/api/pdf-folders", { method: "POST", headers: { Origin: "http://localhost:3000" }, body: JSON.stringify(body) });
+  assert.equal((await routes.POST(request({}))).status, 401);
+  assert.equal((await routes.PATCH(request({}))).status, 401);
+  globalThis.testCookies = { get: () => ({ value: "token" }) };
+  let writes = 0;
+  globalThis.fetch = async (url, options) => {
+    const address = String(url);
+    if (address.includes("accounts:lookup")) return Response.json({ users: [{ localId: "admin" }] });
+    if (address.includes("/admins/")) return Response.json({ name: "admins/admin", fields: {} });
+    if (address.includes(":runQuery")) return Response.json([]);
+    if (options.method === "PATCH") {
+      writes++;
+      const { fields } = JSON.parse(options.body);
+      assert.equal(fields.grade.stringValue, "Grade 10");
+      return Response.json({ name: "pdf_folders/" + uuid, fields });
+    }
+    return new Response(null, { status: 404 });
+  };
+  assert.equal((await routes.POST(request({ name: "Algebra", grade: "Grade 10", medium: "en" }))).status, 200);
+  assert.equal((await routes.POST(request({ name: "Algebra", grade: "", medium: "en" }))).status, 400);
+  const editedFolder = await routes.PATCH(request({ id: uuid, name: "Updated algebra", grade: "Grade 10", medium: "en" }));
+  assert.equal(editedFolder.status, 200);
+  assert.equal((await editedFolder.json()).folder.name, "Updated algebra");
+  assert.equal((await routes.PATCH(request({ id: "invalid", name: "Test", grade: "10", medium: "en" }))).status, 400);
+  assert.deepEqual(await (await routes.GET()).json(), { folders: [] });
+  const storageUrl = await source("../src/lib/pdf-storage.ts", { '"./firebase-config"': JSON.stringify(configUrl) });
+  const pdfs = await import(await source("../src/app/api/pdfs/route.ts", { ...substitutions, '"@/lib/pdf-storage"': JSON.stringify(storageUrl), '"@/lib/pdfs"': JSON.stringify(pdfUrl) }));
+  const missingParent = new Request("http://localhost:3000/api/pdfs", { method: "POST", headers: { Origin: "http://localhost:3000", "Content-Type": "application/json" }, body: JSON.stringify({ folder_id: uuid, title: "Tute", description: "", published: true, drive_url: "https://drive.google.com/file/d/abcdefghijklmnop/view" }) });
+  assert.equal((await pdfs.POST(missingParent)).status, 400);
+  assert.equal(writes, 2);
 });

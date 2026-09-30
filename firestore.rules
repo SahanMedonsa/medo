@@ -30,10 +30,28 @@ service cloud.firestore {
           && medium(get(/databases/$(database)/documents/lesson_folders/$(data.folder_id)).data) == medium(data)
           && get(/databases/$(database)/documents/lesson_folders/$(data.folder_id)).data.category == data.category));
     }
+    match /pdf_folders/{id} {
+      function validPdfFolder(data) {
+        return data.keys().hasAll(['name', 'grade', 'medium', 'created_at'])
+          && data.keys().hasOnly(['name', 'grade', 'medium', 'created_at'])
+          && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+          && data.grade is string && data.grade.size() > 0 && data.grade.size() <= 50
+          && data.medium in ['si', 'en'] && data.created_at is string;
+      }
+      allow read: if true;
+      allow create: if admin() && validPdfFolder(request.resource.data);
+      allow update: if admin() && validPdfFolder(request.resource.data)
+        && request.resource.data.medium == resource.data.medium
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if false;
+    }
     match /pdfs/{id} {
       function validPdf(data) {
         return data.keys().hasAll(['title', 'description', 'filename', 'size', 'published', 'created_at'])
-          && data.keys().hasOnly(['title', 'description', 'filename', 'size', 'published', 'created_at', 'drive_url'])
+          && data.keys().hasOnly(['title', 'description', 'filename', 'size', 'published', 'created_at', 'drive_url', 'folder_id'])
+          && (!('folder_id' in data) || (data.folder_id is string
+            && data.folder_id.matches('^[0-9a-fA-F-]{36}$')
+            && exists(/databases/$(database)/documents/pdf_folders/$(data.folder_id))))
           && data.title is string && data.title.size() > 0 && data.title.size() <= 200
           && data.description is string && data.description.size() <= 5000
           && data.filename is string && data.filename.size() <= 200

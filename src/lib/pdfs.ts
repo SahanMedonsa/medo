@@ -1,5 +1,5 @@
 export const maxPdfBytes = 3 * 1024 * 1024;
-export type PdfTute = { drive_url?: string; id: string; title: string; description: string; filename: string; size: number; published: boolean; created_at: string };
+export type PdfTute = { folder_id?: string; drive_url?: string; id: string; title: string; description: string; filename: string; size: number; published: boolean; created_at: string };
 
 export async function validatePdf(file: File, title: string, description: string) {
   if (!title.trim() || title.trim().length > 200) throw new Error("Enter a title of 1–200 characters.");
@@ -23,4 +23,20 @@ export function googleDriveFileUrl(input: string): string {
     result.searchParams.set("resourcekey", resourceKey);
   }
   return result.toString();
+}
+
+export type PdfFolder = { id: string; name: string; grade: string; medium: "si" | "en"; created_at: string };
+
+export function validatePdfFolder(value: unknown) {
+  const data = value as Partial<PdfFolder> | null;
+  if (!data || typeof data.name !== "string" || !data.name.trim() || data.name.trim().length > 200) throw new Error("Enter a folder name of 1–200 characters.");
+  if (typeof data.grade !== "string" || !data.grade.trim() || data.grade.trim().length > 50) throw new Error("Enter a grade of 1–50 characters.");
+  if (data.medium !== "si" && data.medium !== "en") throw new Error("Choose a teaching medium.");
+  return { name: data.name.trim(), grade: data.grade.trim(), medium: data.medium };
+}
+
+export function googleDrivePreviewUrl(input: string) {
+  const url = new URL(googleDriveFileUrl(input));
+  url.pathname = url.pathname.replace(/\/view$/, "/preview");
+  return url.toString();
 }

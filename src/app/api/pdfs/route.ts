@@ -48,10 +48,14 @@ export async function POST(request: Request) {
       try { body = JSON.parse(raw); } catch { throw new ApiError("Invalid request."); }
       if (!body || typeof body.title !== "string" || !body.title.trim() || body.title.trim().length > 200 ||
         typeof body.description !== "string" || body.description.length > 5000 || typeof body.published !== "boolean" || typeof body.drive_url !== "string") throw new ApiError("Enter a title, description and Drive link.");
+      validId(body.folder_id);
+      const folder = await backend(`/data/pdf_folders?id=eq.${body.folder_id}`, token);
+      if (!folder.ok) throw new ApiError("Could not check the tute folder.", 503);
+      if (!(await folder.json()).length) throw new ApiError("Choose an existing tute folder.");
       let drive_url;
       try { drive_url = googleDriveFileUrl(body.drive_url); } catch (error) { throw new ApiError((error as Error).message); }
       const saved = await backend("/data/pdfs", token, { method: "POST", body: JSON.stringify({
-        title: body.title.trim(), description: body.description.trim(), drive_url, filename: "tute.pdf", size: 0, published: body.published,
+        folder_id: body.folder_id, title: body.title.trim(), description: body.description.trim(), drive_url, filename: "tute.pdf", size: 0, published: body.published,
       }) });
       if (!saved.ok) throw new ApiError("Could not save Drive link. Publish the updated Firestore rules.", 502);
       return json({ pdf: (await saved.json())[0] });
@@ -80,10 +84,23 @@ export async function PATCH(request: Request) {
   try {
     assertSameOrigin(request);
     const { token } = await requireAdmin();
-    const body = await request.json();
-    validId(body.id);
+    const raw = await request.text();
+    if (raw.length > 10000) throw new ApiError("Request is too large.", 413);
+    let body;
+    try { body = JSON.parse(raw); } catch { throw new ApiError("Invalid request."); }
+    validId(body?.id);
     if (typeof body.published !== "boolean") throw new ApiError("Invalid visibility.");
-    const response = await backend(`/data/pdfs?id=eq.${body.id}`, token, { method: "PATCH", body: JSON.stringify({ published: body.published }) });
+    const updates: Record<string, unknown> = { published: body.published };
+    if ("title" in body || "description" in body || "drive_url" in body) {
+      if (typeof body.title !== "string" || !body.title.trim() || body.title.trim().length > 200 || typeof body.description !== "string" || body.description.length > 5000) throw new ApiError("Enter a title of 1–200 characters and a description up to 5000 characters.");
+      updates.title = body.title.trim(); updates.description = body.description.trim();
+      if (body.drive_url !== undefined) {
+        if (typeof body.drive_url !== "string") throw new ApiError("Paste a Google Drive file link.");
+        try { updates.drive_url = googleDriveFileUrl(body.drive_url); } catch (error) { throw new ApiError((error as Error).message); }
+        updates.size = 0;
+      }
+    }
+    const response = await backend(`/data/pdfs?id=eq.${body.id}`, token, { method: "PATCH", body: JSON.stringify(updates) });
     if (!response.ok) throw new ApiError("Could not change PDF visibility.", 502);
     return json({ pdf: (await response.json())[0] });
   } catch (error) { return apiError(error); }
