@@ -251,7 +251,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
           </section>
           : <section className="empty-panel"><BookOpen size={40} /><h2>{category}</h2><p>Resources for this section will appear here when published.</p></section>}
       </main>
-      <footer><Brand compact /> <span>Learn at your own pace.</span><Link href={admin ? "/student" : "/admin"}>{admin ? "Student dashboard" : "Admin dashboard"}</Link></footer>
+      <footer><Brand compact /> <span>Learn at your own pace.</span>{admin && <Link href="/student">Student dashboard</Link>}</footer>
 
       {folderEditor && admin && <FolderEditor medium={medium} demo={demo} folder={folderEditor.folder} category={category} onClose={() => setFolderEditor(null)} onSaved={(saved) => {
         setFolders((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
