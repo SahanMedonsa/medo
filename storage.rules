@@ -1,0 +1,15 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function admin() {
+      return request.auth != null && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+    match /tute-pdfs/{id}/document.pdf {
+      allow read: if admin() || firestore.get(/databases/(default)/documents/pdfs/$(id)).data.published == true;
+      allow create: if admin() && request.resource.size > 0 && request.resource.size <= 3145728
+        && request.resource.contentType == 'application/pdf';
+      allow delete: if admin();
+      allow update: if false;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+[debug] [2026-09-29T04:35:44.943Z] ----------------------------------------------------------------------
+[debug] [2026-09-29T04:35:44.946Z] Command:       /opt/homebrew/Cellar/node/24.3.0/bin/node /opt/homebrew/bin/firebase login:list
+[debug] [2026-09-29T04:35:44.946Z] CLI Version:   14.1.0
+[debug] [2026-09-29T04:35:44.946Z] Platform:      darwin
+[debug] [2026-09-29T04:35:44.946Z] Node Version:  v24.3.0
+[debug] [2026-09-29T04:35:44.946Z] Time:          Tue Sep 29 2026 10:05:44 GMT+0530 (India Standard Time)
+[debug] [2026-09-29T04:35:44.946Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-29T04:35:44.947Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] Logged in as mscmedonsa99@gmail.com
+[debug] [2026-09-29T04:35:46.166Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-09-29T04:35:46.167Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-09-29T04:44:45.736Z] ----------------------------------------------------------------------
+[debug] [2026-09-29T04:44:45.743Z] Command:       /opt/homebrew/Cellar/node/24.3.0/bin/node /opt/homebrew/bin/firebase deploy --only firestore:rules --project medonsa
+[debug] [2026-09-29T04:44:45.744Z] CLI Version:   14.1.0
+[debug] [2026-09-29T04:44:45.744Z] Platform:      darwin
+[debug] [2026-09-29T04:44:45.744Z] Node Version:  v24.3.0
+[debug] [2026-09-29T04:44:45.744Z] Time:          Tue Sep 29 2026 10:14:45 GMT+0530 (India Standard Time)
+[debug] [2026-09-29T04:44:45.744Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-09-29T04:44:45.847Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-09-29T04:44:45.848Z] > authorizing via signed-in user (mscmedonsa99@gmail.com)
+[debug] [2026-09-29T04:44:45.848Z] [iam] checking project medonsa for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-09-29T04:44:45.849Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:45.849Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:45.849Z] > refreshing access token with scopes: []
+[debug] [2026-09-29T04:44:45.850Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-29T04:44:45.850Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:46.056Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-29T04:44:46.056Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:46.057Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions [none]
+[debug] [2026-09-29T04:44:46.057Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions x-goog-quota-user=projects/medonsa
+[debug] [2026-09-29T04:44:46.057Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-09-29T04:44:48.109Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions 401
+[debug] [2026-09-29T04:44:48.109Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"CREDENTIALS_MISSING","metadata":{"service":"cloudresourcemanager.googleapis.com","method":"google.cloudresourcemanager.v1.Projects.TestIamPermissions"}}]}}
+[debug] [2026-09-29T04:44:48.109Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2026-09-29T04:44:48.109Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:48.109Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:48.109Z] > refreshing access token with scopes: []
+[debug] [2026-09-29T04:44:48.109Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-29T04:44:48.109Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:48.170Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-29T04:44:48.171Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:48.172Z] [iam] error while checking permissions, command may fail: Request to https://cloudresourcemanager.googleapis.com/v1/projects/medonsa:testIamPermissions had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[info] 
+[info] === Deploying to 'medonsa'...
+[info] 
+[info] i  deploying firestore 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-09-29T04:44:48.174Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:48.174Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:48.174Z] > refreshing access token with scopes: []
+[debug] [2026-09-29T04:44:48.174Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-29T04:44:48.174Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:48.243Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-29T04:44:48.243Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:48.243Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/medonsa:test [none]
+[debug] [2026-09-29T04:44:48.243Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/medonsa:test [omitted]
+[debug] [2026-09-29T04:44:50.328Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/medonsa:test 401
+[debug] [2026-09-29T04:44:50.328Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/medonsa:test {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2026-09-29T04:44:50.329Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2026-09-29T04:44:50.329Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:50.329Z] Checked if tokens are valid: false, expires at: 1752318119370
+[debug] [2026-09-29T04:44:50.329Z] > refreshing access token with scopes: []
+[debug] [2026-09-29T04:44:50.329Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-09-29T04:44:50.330Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-09-29T04:44:50.391Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-09-29T04:44:50.391Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] 
+[error] Error: Request to https://firebaserules.googleapis.com/v1/projects/medonsa:test had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2026-09-29T04:44:50.936Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 401,
+      "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+      "status": "UNAUTHENTICATED"
+    }
+  },
+  "response": {
+    "statusCode": 401
+  }
+}

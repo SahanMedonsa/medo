@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function admin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function categoryValid(value) {
+      return value in ['2026 O/L Maths', 'Grade 10', 'General maths', 'AL Video Modules', 'GIT', 'O/L Courses', 'Tutes', '#tute', 'A/L Past Papers', 'O/L Past Papers'];
+    }
+    function medium(data) { return data.get('medium', 'si'); }
+    function textValid(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.description is string && data.description.size() <= 5000
+        && medium(data) in ['si', 'en'] && categoryValid(data.category) && data.created_at is string;
+    }
+    function validFolder(data) {
+      return data.keys().hasAll(['title', 'description', 'category', 'planned_videos', 'marks', 'created_at'])
+        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'planned_videos', 'marks', 'created_at'])
+        && textValid(data) && data.description.size() > 0
+        && data.planned_videos is int && data.planned_videos >= 1 && data.planned_videos <= 10000
+        && data.marks is int && data.marks >= 0 && data.marks <= 1000;
+    }
+    function validVideo(data) {
+      return data.keys().hasAll(['title', 'description', 'category', 'video_id', 'published', 'folder_id', 'created_at'])
+        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'video_id', 'published', 'folder_id', 'created_at'])
+        && textValid(data) && data.published is bool
+        && data.video_id is string && data.video_id.matches('^[a-zA-Z0-9_-]{11}$')
+        && (data.folder_id == null || (data.folder_id is string
+          && data.folder_id.matches('^[0-9a-fA-F-]{36}$')
+          && medium(get(/databases/$(database)/documents/lesson_folders/$(data.folder_id)).data) == medium(data)
+          && get(/databases/$(database)/documents/lesson_folders/$(data.folder_id)).data.category == data.category));
+    }
+    match /pdfs/{id} {
+      function validPdf(data) {
+        return data.keys().hasAll(['title', 'description', 'filename', 'size', 'published', 'created_at'])
+          && data.keys().hasOnly(['title', 'description', 'filename', 'size', 'published', 'created_at', 'drive_url'])
+          && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+          && data.description is string && data.description.size() <= 5000
+          && data.filename is string && data.filename.size() <= 200
+          && data.size is int
+          && (('drive_url' in data && data.drive_url is string
+            && data.drive_url.matches('https://drive[.]google[.]com/file/d/[a-zA-Z0-9_-]{10,200}/view([?]resourcekey=[a-zA-Z0-9_-]{1,200})?') && data.size == 0)
+            || (!('drive_url' in data) && data.size > 0 && data.size <= 3145728))
+          && data.published is bool && data.created_at is string;
+      }
+      allow read: if resource.data.published == true || admin();
+      allow create: if admin() && validPdf(request.resource.data);
+      allow update: if admin() && validPdf(request.resource.data)
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if admin();
+    }
+    match /admins/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+    match /lesson_folders/{id} {
+      allow read: if true;
+      allow create: if admin() && validFolder(request.resource.data);
+      allow update: if admin() && validFolder(request.resource.data)
+        && medium(request.resource.data) == medium(resource.data)
+        && request.resource.data.category == resource.data.category
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if false;
+    }
+    match /modules/{id} {
+      allow read: if resource.data.published == true || admin();
+      allow create: if admin() && validVideo(request.resource.data);
+      allow update: if admin() && validVideo(request.resource.data)
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if admin();
+    }
+  }
+}
