@@ -68,3 +68,13 @@ export function validateFolder(input: Record<string, unknown>) {
   if (typeof input.marks !== "number" || !Number.isInteger(input.marks) || input.marks < 0 || input.marks > 1000) throw new Error("Enter marks between 0 and 1,000.");
   return { medium: validateMedium(input.medium), title, description, category: input.category as string, planned_videos: input.planned_videos, marks: input.marks };
 }
+
+// Keep stored category keys stable when navigation labels change.
+export function categoryLabel(category: string): string {
+  const labels: Record<string, string> = {
+    "Tutes": "O/L Maths Tutes",
+    "O/L Past Papers": "O/L Maths Past Papers",
+    "AL Video Modules": "2028 THEORY",
+  };
+  return labels[category] ?? category;
+}

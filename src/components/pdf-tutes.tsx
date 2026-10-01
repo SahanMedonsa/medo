@@ -149,7 +149,7 @@ export default function PdfTutes({ admin, demo, medium }: { admin: boolean; demo
   const unfiled = pdfs.filter((pdf) => !pdf.folder_id);
   return <section className="pdf-tutes">
     <div className="category-title tute-title-bar">
-      <h1>Tutes</h1>
+      <h1>O/L Maths Tutes</h1>
     </div>
     {activeId && <div className="tute-folder-summary"><button className="tute-back" aria-label="Back to all tute folders" onClick={() => { setActiveId(null); setQuery(""); }}><ArrowLeft size={18} /><span>Back</span></button><h2>{activeFolder?.name ?? "Unfiled tutes"}</h2>{activeFolder && <span>{/^grade\b/i.test(activeFolder.grade) ? activeFolder.grade : `Grade ${activeFolder.grade}`}</span>}</div>}
     <div className="catalog-toolbar"><h2>{activeId ? "PDF tutes" : "Tute folders"}</h2><div className="catalog-controls">

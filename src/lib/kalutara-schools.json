@@ -1,0 +1,2077 @@
+[
+  {
+    "id": "02192",
+    "name": "ADIKARIGODA K.V.",
+    "address": "ADIKARIGODA KALUTARA"
+  },
+  {
+    "id": "02320",
+    "name": "AGALAWATTA MIHINDU M.M.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02482",
+    "name": "AL-FASIYATHUL NASRIYA BOYS COLLEGE",
+    "address": "BERUWALA"
+  },
+  {
+    "id": "02410",
+    "name": "AL-HASANIYA M.V.",
+    "address": "INDIRILIGODA, MAGGONA"
+  },
+  {
+    "id": "02434",
+    "name": "ALAVIYA MUSLIM MAHA VIDYALAYA",
+    "address": "ELUWILA PANADURA"
+  },
+  {
+    "id": "02042",
+    "name": "ALUBOMULLA S.MAHINDA M.V.",
+    "address": "ALUBOMULLA"
+  },
+  {
+    "id": "02405",
+    "name": "ALUTHGAM WEEDIYA MUSLIM BALIKA M.V.",
+    "address": "DHARGA TOWN"
+  },
+  {
+    "id": "02276",
+    "name": "ALUTHGAMA NATIONAL SCHOOL",
+    "address": "ALUTHGAMA"
+  },
+  {
+    "id": "02074",
+    "name": "ALUTHGAMA P.V.",
+    "address": "WELMILA JUNCTION, BANDARAGAMA"
+  },
+  {
+    "id": "02277",
+    "name": "ALUTHGAMA SANGAMITTA BALIKA M.V.",
+    "address": "WELIPENNA RD, ALUTHGAMA"
+  },
+  {
+    "id": "02193",
+    "name": "ALUTHGAMGODA K.V.",
+    "address": "ALUTHGAMGODA, NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02142",
+    "name": "AMARA GEDARA K.V.",
+    "address": "AMARAGEDARA, BULATHSINGHALA"
+  },
+  {
+    "id": "02342",
+    "name": "AMBEGODA P.V.",
+    "address": "AMBEGODA, MORAPITIYA"
+  },
+  {
+    "id": "02443",
+    "name": "AMBETENNA TAMIL P.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02194",
+    "name": "ANDAWALA K.V.",
+    "address": "MEEGAMA, DHARGA TOWN"
+  },
+  {
+    "id": "02444",
+    "name": "ANNASIGALA TAMIL P.V.",
+    "address": "NAVUTHTHUDUWA, MATUGAMA"
+  },
+  {
+    "id": "02050",
+    "name": "ARUGGODA SRI PARAKKRAMA M.V.",
+    "address": "ARUGGODA, ALUBOMULLA"
+  },
+  {
+    "id": "02321",
+    "name": "ATALE M.V.",
+    "address": "GURULUBEDDA"
+  },
+  {
+    "id": "02331",
+    "name": "BADURALIYA K.V.",
+    "address": "BADURALIYA"
+  },
+  {
+    "id": "02436",
+    "name": "BANDARAGAMA AL-GAZZALY M.M.V.",
+    "address": "ATULUGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02477",
+    "name": "BANDARAGAMA ALGAZZALY P.V.",
+    "address": "ATULUGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02040",
+    "name": "BANDARAGAMA M.M.V.",
+    "address": "BANDARAGAMA"
+  },
+  {
+    "id": "02060",
+    "name": "BATAGODA P.V.",
+    "address": "BATAGODA, GALAPATHA"
+  },
+  {
+    "id": "02123",
+    "name": "BATUGAMPALA P.V.",
+    "address": "BATUGAMPALA, HANDAPANGODA"
+  },
+  {
+    "id": "02025",
+    "name": "BEKKEGAMA P.V.",
+    "address": "BEKKEGAMA, PANADURA"
+  },
+  {
+    "id": "02323",
+    "name": "BELLANA M.V.",
+    "address": "BELLANA"
+  },
+  {
+    "id": "02165",
+    "name": "BELLAPITIYA P.V.",
+    "address": "BELLAPITIYA, HORANA"
+  },
+  {
+    "id": "02409",
+    "name": "BERUWALA AL-FASIYATHUL NASRIYA MUSILM BALIKA M.V.",
+    "address": "MARADANA RD, MARADANA, BERUWALA"
+  },
+  {
+    "id": "02406",
+    "name": "BERUWALA AL-HUMAISARA CENTRAL COLLEGE",
+    "address": "CHINA FORT BERUWALA"
+  },
+  {
+    "id": "02291",
+    "name": "BERUWALA ARIYAWANSHA MAHA VIDYALAYA",
+    "address": "ARIYAWANSHA MW, BERUWALA"
+  },
+  {
+    "id": "02292",
+    "name": "BERUWALA BUDDHIST JUNIOR SCHOOL",
+    "address": "TEMPLE RD, BERUWALA"
+  },
+  {
+    "id": "02282",
+    "name": "BERUWALA D.S. SENANAYAKA NATIONAL SCHOOL",
+    "address": "BERUWALA"
+  },
+  {
+    "id": "02408",
+    "name": "BERUWALA NALEEM HAJIAR LADIES COLLEGE",
+    "address": "CHINA FORT, BERUWALA"
+  },
+  {
+    "id": "02309",
+    "name": "BERUWALA PRIMARY SCHOOL",
+    "address": "BERUWALA"
+  },
+  {
+    "id": "02293",
+    "name": "BERUWALA ROMAN CATHOLIC JUNIOR SCHOOL",
+    "address": "POLKOTUWA BERUWALA"
+  },
+  {
+    "id": "02411",
+    "name": "BERUWALA ZAM REFAI HAJIAR MAHA VIDYALAYA",
+    "address": "MALIGAHENA BERUWALA"
+  },
+  {
+    "id": "02445",
+    "name": "BHARADI TAMIL MAHA VIDYALAYA",
+    "address": "ARAPOLAKANDE TEBUWANA"
+  },
+  {
+    "id": "02348",
+    "name": "BOLLUNNA P.V.",
+    "address": "HEDIGALLA COLONY, BADURALIYA"
+  },
+  {
+    "id": "02185",
+    "name": "BOLOSSAGAMA M.V.",
+    "address": "BOLOSSAGOMA"
+  },
+  {
+    "id": "02186",
+    "name": "BOMBUWALA SRI DHARMALOKA M.V.",
+    "address": "BOMBUWALA KALUTHARA SOUTH"
+  },
+  {
+    "id": "02230",
+    "name": "BOMBUWALA SRI DHARMALOKA P.V.",
+    "address": "MANKADA BOMBUWALA"
+  },
+  {
+    "id": "02215",
+    "name": "BONDUPITIYA K.V.",
+    "address": "MEEGAMA, DHARGA TOWN"
+  },
+  {
+    "id": "02216",
+    "name": "BOPITIYA K.V.",
+    "address": "BOPOTIYA, MATUGAMA"
+  },
+  {
+    "id": "02377",
+    "name": "BOTHALAWA K.V.",
+    "address": "MEEGAHATHENNA"
+  },
+  {
+    "id": "02159",
+    "name": "BOTHALEGAMA M.V.",
+    "address": "BOTHALEGAMA"
+  },
+  {
+    "id": "02133",
+    "name": "BULATHSINGHALA M.M.V.",
+    "address": "BULATHSINGHALA"
+  },
+  {
+    "id": "02158",
+    "name": "BULATHSINGHALA P.V.",
+    "address": "BULATHSINGHALA"
+  },
+  {
+    "id": "02481",
+    "name": "CHINAFORT PRIMARY SCHOOL",
+    "address": "PANNILA RD, CHINA FORT, BERUWALA"
+  },
+  {
+    "id": "02441",
+    "name": "CULLODEN NAVODYA TAMIL MAHA VIDYALAYA",
+    "address": "NEBODA"
+  },
+  {
+    "id": "02224",
+    "name": "D.D. ATHULATHMUDALI K.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02459",
+    "name": "DALKEITH TAMIL K.V.",
+    "address": "BADURALIYA"
+  },
+  {
+    "id": "02330",
+    "name": "DAPILIGODA P.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02141",
+    "name": "DEEPALOKA M.V.",
+    "address": "WARAKAGODA, NEBODA"
+  },
+  {
+    "id": "02155",
+    "name": "DEEYAKADUWA WIDYARTHA K.V.",
+    "address": "DEEYAKADUWA, MAHAGAMA"
+  },
+  {
+    "id": "02262",
+    "name": "DELDUWA K.V.",
+    "address": "DELDUWA, WADDUWA"
+  },
+  {
+    "id": "02152",
+    "name": "DELMELLA K.V.",
+    "address": "DELMALLA, BULATHSINHALA"
+  },
+  {
+    "id": "02263",
+    "name": "DESHASTHRA BALIKA V.",
+    "address": "STATION RD, KALUTARA NORTH"
+  },
+  {
+    "id": "02237",
+    "name": "DEVAGODA P.V.",
+    "address": "MEEGAMA, DHARGA TOWN"
+  },
+  {
+    "id": "02153",
+    "name": "DEVAMULLA P.V.",
+    "address": "GOVINNA"
+  },
+  {
+    "id": "02229",
+    "name": "DHAMMANANDA P.V.",
+    "address": "BADUGAMA, MATUGAMA"
+  },
+  {
+    "id": "02418",
+    "name": "DHARGA TOWN AL-HAMBRA MAHA VIDYALAYA",
+    "address": "DHARGA TOWN"
+  },
+  {
+    "id": "02279",
+    "name": "DHARGA TOWN SRI GNANISSARA MAHA VIDYALAYA",
+    "address": "NAKANDALAGODA, DHARGA TOWN"
+  },
+  {
+    "id": "02407",
+    "name": "DHARGA TOWN ZAHIRA MAHA VIDYALAYA",
+    "address": "DHARGA TOWN"
+  },
+  {
+    "id": "02475",
+    "name": "DHARGA TOWN ZAHIRA PRIMARY SCHOOL",
+    "address": "ZAHIRA COLLEGE RD, DHARGA TOWN"
+  },
+  {
+    "id": "02162",
+    "name": "DHARMAPALA M.V., MOLKAWA",
+    "address": "MOLKAWA"
+  },
+  {
+    "id": "02190",
+    "name": "DHARMARAJA K.V.",
+    "address": "PANTHIYA, MATUGAMA"
+  },
+  {
+    "id": "02023",
+    "name": "DIBBEDDA GUNAWARDHANA P.V.",
+    "address": "DIBBEDA, PANADURA"
+  },
+  {
+    "id": "02347",
+    "name": "DIGANNA P.V.",
+    "address": "DIGANNA, MORAPITIYA"
+  },
+  {
+    "id": "02404",
+    "name": "DIKHENA K.V.",
+    "address": "HEDIGALLA COLONY, BADURALIYA"
+  },
+  {
+    "id": "02438",
+    "name": "DIKHENA TAMIL K.V.",
+    "address": "GALPATHA"
+  },
+  {
+    "id": "02154",
+    "name": "DIWALAKADA K.V.",
+    "address": "DIWALAKADA, BULATHSINGHALA"
+  },
+  {
+    "id": "02246",
+    "name": "DIYAGAMA M.V.",
+    "address": "DIYAGAMA, GALPATHA"
+  },
+  {
+    "id": "02278",
+    "name": "DIYALAGODA MAHA VIDYALAYA",
+    "address": "DIYALAGODA, MAGGONA"
+  },
+  {
+    "id": "02371",
+    "name": "DODAMPAPITIYA P.V.",
+    "address": "DODAMPAPITIYA UTHUMGAMA MATHUGAMA"
+  },
+  {
+    "id": "02183",
+    "name": "DODANGODA M.V.",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02187",
+    "name": "DODANGODA MIRISWATTA NATIONAL SCHOOL",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02201",
+    "name": "DODANGODA PRESIDENT'S COLLEGE",
+    "address": "GANG-IMA, DODANGODA"
+  },
+  {
+    "id": "02044",
+    "name": "DOMBAGODA SEELARATHANA M.V.",
+    "address": "DOMBAGODA, HORANA"
+  },
+  {
+    "id": "02310",
+    "name": "DUWEGODA PRIMARY SCHOOL",
+    "address": "DUWEGODA HALKANDAWILA"
+  },
+  {
+    "id": "02420",
+    "name": "EDURANGALA TAMIL K.V.",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02343",
+    "name": "ELABODA P.V.",
+    "address": "ELABODA, BADURALIYA"
+  },
+  {
+    "id": "02195",
+    "name": "ELADUWA K.V.",
+    "address": "HALKADAWILA PAYAGALA"
+  },
+  {
+    "id": "02446",
+    "name": "ELADUWA TAMIL VIDYALAYA",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02255",
+    "name": "ETHANAMADALA K.V.",
+    "address": "ETHANAMADALA, KALUTARA"
+  },
+  {
+    "id": "02424",
+    "name": "FROCESTER TAMIL P.V.",
+    "address": "GOVINNA"
+  },
+  {
+    "id": "02457",
+    "name": "GALEWATTA TAMIL P.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02172",
+    "name": "GALLAPPAHALA P.V.",
+    "address": "GALLAPPAHALA, MAHAGAMA"
+  },
+  {
+    "id": "02239",
+    "name": "GALLENIYAKANDA P.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02054",
+    "name": "GALPATHA K.V.",
+    "address": "GALPATHA, KALUTARA"
+  },
+  {
+    "id": "02071",
+    "name": "GALTHUDE DHAMMAKIRTHI P.V.",
+    "address": "GLTHUDE, BANDARAGAMA"
+  },
+  {
+    "id": "02205",
+    "name": "GAMAGODA P.V.",
+    "address": "GAMAGODA KALUTARA"
+  },
+  {
+    "id": "02361",
+    "name": "GAMMANA K.V.",
+    "address": "GAMMANA, YAGIRALA"
+  },
+  {
+    "id": "02118",
+    "name": "GATAKOSGAHAHENA DHARMASHOKA P.V.",
+    "address": "HANDAPANGODA"
+  },
+  {
+    "id": "02425",
+    "name": "GIKIYANAKANDA TAMIL K.V.",
+    "address": "GIKIYANAKANDA, NEBODA"
+  },
+  {
+    "id": "02151",
+    "name": "GIRIKOLA GAMUNU K.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02479",
+    "name": "GNANISSARA PRIMARY SCHOOL",
+    "address": "NAKANDALAGODA, DHRARGA TOWN"
+  },
+  {
+    "id": "02447",
+    "name": "GODAHENA TAMIL VIDYALAYAM",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02260",
+    "name": "GONADUWA K.V.",
+    "address": "MAHA GONADUWA, MORONTHUDUWA"
+  },
+  {
+    "id": "02136",
+    "name": "GOVINNA M.V.",
+    "address": "GOVINNA"
+  },
+  {
+    "id": "02173",
+    "name": "GOVINNA P.V.",
+    "address": "GOVINNA"
+  },
+  {
+    "id": "02376",
+    "name": "GULANAWATTA K.V.",
+    "address": "PELAWATTA TEA PROJECT, MATHUGAMA"
+  },
+  {
+    "id": "02372",
+    "name": "GULAWITA P.V.",
+    "address": "GULAWITA SOUTH, WALALLAWITA"
+  },
+  {
+    "id": "02056",
+    "name": "GUNGAMUWA K.V.",
+    "address": "BELLANTHUDAWA, BANDARAGAMA"
+  },
+  {
+    "id": "02206",
+    "name": "GURUDOLA P.V.",
+    "address": "GURUDOLA, MATUGAMA"
+  },
+  {
+    "id": "02100",
+    "name": "GURUGODA K.V.",
+    "address": "KIRIGALAHENA, HORANA"
+  },
+  {
+    "id": "02329",
+    "name": "GURULUBEDDA P.V.",
+    "address": "GURULUBEDDA"
+  },
+  {
+    "id": "02469",
+    "name": "GURULUGOMI M.V.",
+    "address": "KUMARATHUNGA MW, KALUTARA NORTH"
+  },
+  {
+    "id": "02316",
+    "name": "HALAWAKANDA P.V.",
+    "address": "HALAWAKANDA BERUWALA"
+  },
+  {
+    "id": "02364",
+    "name": "HALAWALA C.W.W.KANNANGARA K.V.",
+    "address": "HALAWALA VIA MATHUGAMA"
+  },
+  {
+    "id": "02398",
+    "name": "HALAWALKELE P.V.",
+    "address": "HALAWALKELE MEEGATHENNA"
+  },
+  {
+    "id": "02353",
+    "name": "HALDOLA SRI JINAWANSHA P.V.",
+    "address": "HALDOLA, BELLANA"
+  },
+  {
+    "id": "02305",
+    "name": "HALKANDAWILA MAHA VIDYALAYA",
+    "address": "HALKANDAWILA, PAYAGALA"
+  },
+  {
+    "id": "02066",
+    "name": "HALTHOTA K.V.",
+    "address": "HALTHOTA"
+  },
+  {
+    "id": "02168",
+    "name": "HALWATHURA K.V.",
+    "address": "HALWATHURA, BULATHSINHALA"
+  },
+  {
+    "id": "02465",
+    "name": "HALWATHURA TAMIL M.V.",
+    "address": "BULATHSINHALA"
+  },
+  {
+    "id": "02352",
+    "name": "HANDAGIRIKANDA P.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02109",
+    "name": "HANDAPANGODA M.V.",
+    "address": "HADAPANGODA"
+  },
+  {
+    "id": "02108",
+    "name": "HANDUPELPOLA K.V.",
+    "address": "KUDAUDUWA, HORANA"
+  },
+  {
+    "id": "02341",
+    "name": "HEDIGALLA JANAPADA M.V.",
+    "address": "HEDIGALLA JANAPADAYA, BADURALIYA."
+  },
+  {
+    "id": "02340",
+    "name": "HEDIGALLE SRI VIPULASIRI K.V.",
+    "address": "HEDIGALLA, GURULUBEDDA"
+  },
+  {
+    "id": "02128",
+    "name": "HEGALLA P.V.",
+    "address": "MAHENA, HORANA"
+  },
+  {
+    "id": "02384",
+    "name": "HEWESSA K.V.",
+    "address": "PAHALA HEWESSA"
+  },
+  {
+    "id": "02067",
+    "name": "HIRANA PRIMARY SCHOOL",
+    "address": "HIRANA PANADURA"
+  },
+  {
+    "id": "02317",
+    "name": "HIRIGALGODALLA P.V.",
+    "address": "HIRIGALGODALLA PAYAGALA"
+  },
+  {
+    "id": "02093",
+    "name": "HORANA DON PEDRICK M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02131",
+    "name": "HORANA PRAJAPATHI B.M.V.",
+    "address": "DICKHENAPURA, HORANA"
+  },
+  {
+    "id": "02110",
+    "name": "HORANA RAJAKEEYA M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02091",
+    "name": "HORANA SRI MEDHANKARA M.V.",
+    "address": "PADUKKA RD, HORANA"
+  },
+  {
+    "id": "02085",
+    "name": "HORANA SRIPALEE M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02421",
+    "name": "HORANA TAMIL M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02083",
+    "name": "HORANA TAXILA M.M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02119",
+    "name": "HORANA TAXILA M.V.",
+    "address": "HORANA"
+  },
+  {
+    "id": "02191",
+    "name": "HORAWALA M.V.",
+    "address": "HORAWALA, WELIPENNA"
+  },
+  {
+    "id": "02435",
+    "name": "HORETHUDUWA MUSLIM VIDYALAYA",
+    "address": "GALLE RD, HORETHUDUWA KESELWATTHA, PANADURA"
+  },
+  {
+    "id": "02011",
+    "name": "HORETHUDUWA SRI CHANDRASEKARA M.V.",
+    "address": "HORETHUDUWA, KESELWATHTHA"
+  },
+  {
+    "id": "02414",
+    "name": "I L M SAMSUDEEN VIDYALAYA",
+    "address": "MADDONA BERUWALA"
+  },
+  {
+    "id": "02079",
+    "name": "IBULAHENA P.V.",
+    "address": "PARAGASTHOTA, HORANA"
+  },
+  {
+    "id": "02196",
+    "name": "IDDAGODA P.V.",
+    "address": "IDDAGODA, MATUGAMA"
+  },
+  {
+    "id": "02366",
+    "name": "IHALA HEWESSA K.V.",
+    "address": "IHALA HEWESSA, PITIGALA"
+  },
+  {
+    "id": "02143",
+    "name": "ILIMBA GAMINI K.V.",
+    "address": "ILIMBA, HORANA"
+  },
+  {
+    "id": "02433",
+    "name": "ILMA MUSLIM VIDYALAYA",
+    "address": "AMBALANDUWA PANADURA"
+  },
+  {
+    "id": "02345",
+    "name": "ILUKPOTHA K.V.",
+    "address": "ILUKPOTHA, BADURALIYA"
+  },
+  {
+    "id": "02084",
+    "name": "INGIRIYA GAMINI M.M.V.",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02127",
+    "name": "INGIRIYA SRI SUMANAJOTHI P.V.",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02344",
+    "name": "INGURUDALUWA K.V.",
+    "address": "HEDIGALLA JANAPADAYA, BADURALIYA"
+  },
+  {
+    "id": "02111",
+    "name": "ISIPATHANA P.V.",
+    "address": "ARAKAWILA, HADAPANGODA"
+  },
+  {
+    "id": "02358",
+    "name": "ITTAPANA COLVIN R DE SILVA M.V.",
+    "address": "ITTAPANA"
+  },
+  {
+    "id": "02016",
+    "name": "JERAMIYAS DIAS K.V.",
+    "address": "WEERAMAN RD, PANADURA"
+  },
+  {
+    "id": "02112",
+    "name": "KABALLAGODA K.V.",
+    "address": "KABALLAGODA, HORANA"
+  },
+  {
+    "id": "02228",
+    "name": "KAJUDUWA P.V.",
+    "address": "KAJUDUWA, DODANGODA"
+  },
+  {
+    "id": "02114",
+    "name": "KAKULALIYA P.V.",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02452",
+    "name": "KALAIMAGAL M.V.",
+    "address": "YATADOLA, MATUGAMA"
+  },
+  {
+    "id": "02258",
+    "name": "KALAMULLA R.C.K.V.",
+    "address": "KALAMULLA, KALUTARA"
+  },
+  {
+    "id": "02257",
+    "name": "KALAPUGAMA MEDHANANDA V.",
+    "address": "KALAPUGAMA, MORONTHUDUWA"
+  },
+  {
+    "id": "02284",
+    "name": "KALAWILA KANISHTA VIDYALAYA",
+    "address": "KALAWILA BERUWALA"
+  },
+  {
+    "id": "02103",
+    "name": "KALUPAHANA K.V.",
+    "address": "PORUWADANDA"
+  },
+  {
+    "id": "02242",
+    "name": "KALUTARA BALIKA M.V.",
+    "address": "KALUTARA SOUTH"
+  },
+  {
+    "id": "02245",
+    "name": "KALUTARA GNANODAYA M.V.",
+    "address": "GNANODAYA MW, KALUTARA SOUTH"
+  },
+  {
+    "id": "02243",
+    "name": "KALUTARA M.V.",
+    "address": "KALUTARA SOUTH"
+  },
+  {
+    "id": "02413",
+    "name": "KALUTARA MUSLIM BALIKA M.V.",
+    "address": "MOOR STREET, KALUTARA"
+  },
+  {
+    "id": "02412",
+    "name": "KALUTARA MUSLIM M.M.V.",
+    "address": "51, MOSQUE RD, KALUTARA SOUTH"
+  },
+  {
+    "id": "02253",
+    "name": "KALUTARA ST. JOHN'S M.V.",
+    "address": "KALUTARA SOUTH"
+  },
+  {
+    "id": "02241",
+    "name": "KALUTARA TISSA M.M.V.",
+    "address": "NAGAS JUNCTION, KALUTARA NORTH"
+  },
+  {
+    "id": "02283",
+    "name": "KALUWAMODARA K.V.",
+    "address": "KALUWAMODARA ALUTHGAMA"
+  },
+  {
+    "id": "02322",
+    "name": "KAMBURAWALA M.V.",
+    "address": "KAMBURAWALA, BADURALIYA"
+  },
+  {
+    "id": "02052",
+    "name": "KAMBURUGODA P.V.",
+    "address": "KAMBURUGODA, BANDARAGAMA"
+  },
+  {
+    "id": "02107",
+    "name": "KANANVILA SRI SUGATHAPALA K.V.",
+    "address": "KANANVILA, HORANA"
+  },
+  {
+    "id": "02147",
+    "name": "KANDANA P.V.",
+    "address": "KANDANA, HORANA"
+  },
+  {
+    "id": "02098",
+    "name": "KANDANAPITIYA P.V.",
+    "address": "BOPE, PADUKKA."
+  },
+  {
+    "id": "02326",
+    "name": "KAPUGEDARA K.V.",
+    "address": "KAPUGEDARA, MOLKAWA"
+  },
+  {
+    "id": "02306",
+    "name": "KARANDAGODA P.V.",
+    "address": "KARANDAGODA BERUWALA"
+  },
+  {
+    "id": "02403",
+    "name": "KARAPAGALA P.V.",
+    "address": "KARAPAGALA, YAGIRALA"
+  },
+  {
+    "id": "02077",
+    "name": "KATAGODA P.V.",
+    "address": "KATAGODA, MILLANIYA"
+  },
+  {
+    "id": "02198",
+    "name": "KATUGAHAHENA K.V.",
+    "address": "KATUGAHAHENA, NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02256",
+    "name": "KATUKURUNDA BUDDHIST K.V.",
+    "address": "KATUKURUNDA, KALUTARA"
+  },
+  {
+    "id": "02250",
+    "name": "KATUKURUNDA DHARMAPALA M.V.",
+    "address": "KATUKURUNDA, KALUTARA"
+  },
+  {
+    "id": "02244",
+    "name": "KATUKURUNDA R.C.M.V.",
+    "address": "KATUKURUNDA, KALUTARA"
+  },
+  {
+    "id": "02199",
+    "name": "KATUWALAGODA K.V.",
+    "address": "WELIPENNA"
+  },
+  {
+    "id": "02200",
+    "name": "KEERANTHIDIYA K.V.",
+    "address": "NAVUTHTHUDUWA, MATUGAMA"
+  },
+  {
+    "id": "02355",
+    "name": "KELINKANDA JANAPADAYA P.V.",
+    "address": "KELINKANDA, AGALAWATTA"
+  },
+  {
+    "id": "02327",
+    "name": "KELINKANDA K.V.",
+    "address": "KELINKANDA, AGALAWATTA"
+  },
+  {
+    "id": "02148",
+    "name": "KESELHENAWA P.V.",
+    "address": "DOMBADODA, HORANA"
+  },
+  {
+    "id": "02018",
+    "name": "KESELWATHTHA SRI JINADARMADANA V.",
+    "address": "KESELWATHTHA, PANADURA"
+  },
+  {
+    "id": "02360",
+    "name": "KEVITIYAGALA M.V.",
+    "address": "KEVITIYAGALA, POLGAMPALA"
+  },
+  {
+    "id": "02055",
+    "name": "KIMMANTHUDAWA SRI SUMANAJOTHI P.V.",
+    "address": "KIMMANTHUDAWA, BANDARAGAMA"
+  },
+  {
+    "id": "02370",
+    "name": "KITHULGODA K.V.",
+    "address": "KITULGODA, AGALAWATTA"
+  },
+  {
+    "id": "02116",
+    "name": "KITIGAMGODA SRI SUBHARATHI P.V.",
+    "address": "KTIGAMGODA, PADUKKA"
+  },
+  {
+    "id": "02149",
+    "name": "KOBAWAKA P.V.",
+    "address": "KOBAWAKA, GOVINNA"
+  },
+  {
+    "id": "02426",
+    "name": "KOBOWELA TAMIL P.V.",
+    "address": "DENIKADA, GOVINNA"
+  },
+  {
+    "id": "02202",
+    "name": "KOHOLANA K.V.",
+    "address": "KOHOLANA KULUTARA SOUTH"
+  },
+  {
+    "id": "02328",
+    "name": "KOSGULANA K.V.",
+    "address": "KOSGULANA, MOLKAWA"
+  },
+  {
+    "id": "02285",
+    "name": "KOSHENA KANISHTA VIDYALAYA",
+    "address": "PAMBE PAYAGALA"
+  },
+  {
+    "id": "02428",
+    "name": "KUDAGANGA TAMIL K.V.",
+    "address": "MAHAGAMA"
+  },
+  {
+    "id": "02249",
+    "name": "KUDAHEENATIYANGALA SIRI SEEVALEE K.V.",
+    "address": "DUWA TEMPLE RD, KALUTARA SOUTH"
+  },
+  {
+    "id": "02135",
+    "name": "KUDALIGAMA M.V.",
+    "address": "KUDALIGAMA, NEBODA"
+  },
+  {
+    "id": "02099",
+    "name": "KULUPANA TAXILA P.V.",
+    "address": "KULUPANA, POKUNUWITA"
+  },
+  {
+    "id": "02115",
+    "name": "KUMBUKA EAST P.V.",
+    "address": "KUMBUKA EAST, GONAPOLA JUNCTION"
+  },
+  {
+    "id": "02117",
+    "name": "KURANA P.V.",
+    "address": "KURANA, HANDAPANGODA"
+  },
+  {
+    "id": "02369",
+    "name": "KURUPITA K.V.",
+    "address": "POLGAMPOLA"
+  },
+  {
+    "id": "02017",
+    "name": "KURUPPUMULLA PRARAKKAMA P.V.",
+    "address": "KURUPPPUMULLA, PANADURA"
+  },
+  {
+    "id": "02049",
+    "name": "LABUGAMA VIJITHA K.V.",
+    "address": "LABUGAMA, HALTHOTA"
+  },
+  {
+    "id": "02219",
+    "name": "LEWWANDUWA P.V.",
+    "address": "LEWWANDUWA, WELIPENNA"
+  },
+  {
+    "id": "02383",
+    "name": "LIHINIYAWA K.V.",
+    "address": "LIHINIYAWA MEEGAHATHENNA"
+  },
+  {
+    "id": "02065",
+    "name": "LOKAPILA LAKSHMI P.V.",
+    "address": "WEEDAGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02026",
+    "name": "MADAWILGODA SRI GNANANDA K.V.",
+    "address": "THALPITIYA NORTH, WADDUWA"
+  },
+  {
+    "id": "02448",
+    "name": "MADDEGEDARA TAMIL P.V.",
+    "address": "NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02139",
+    "name": "MADURAWALA M.V.",
+    "address": "ANGURUWATHOTA"
+  },
+  {
+    "id": "02301",
+    "name": "MAGALKANDA BAUDDA K.V.",
+    "address": "MAGALKANNDA, MAGGONA"
+  },
+  {
+    "id": "02312",
+    "name": "MAGALKANDA METHODIST COLLEGE",
+    "address": "MAGALKANDA, MAGGONA"
+  },
+  {
+    "id": "02298",
+    "name": "MAGGONA ST. MARY'S VIDYALAYA",
+    "address": "REV.FR.MERCERLIN JAYAKODI MW, MAGGONA"
+  },
+  {
+    "id": "02332",
+    "name": "MAGURA P.V.",
+    "address": "MAGURA, BADURALIYA"
+  },
+  {
+    "id": "02379",
+    "name": "MAGURUMASWILA K.V.",
+    "address": "MAGURUMASWILA, WALALLAWITA"
+  },
+  {
+    "id": "02080",
+    "name": "MAHABELLANA P.V.",
+    "address": "ALUBOMULLA"
+  },
+  {
+    "id": "02081",
+    "name": "MAHABELLANA SAMARANAYAKA P.V.",
+    "address": "MAHABELLANA, ALLUBOMULLA"
+  },
+  {
+    "id": "02160",
+    "name": "MAHAGAMA P.V.",
+    "address": "MAHAGAMA"
+  },
+  {
+    "id": "02295",
+    "name": "MAHAGAMMEDDA PRIMARY SCHOOL",
+    "address": "MAHAGAMMEDDA PAYAGALA"
+  },
+  {
+    "id": "02378",
+    "name": "MAHAKALUPAHANA K.V.",
+    "address": "MAHAKALUPAHANA, MATHUGAMA"
+  },
+  {
+    "id": "02062",
+    "name": "MAHAWILA M.V.",
+    "address": "MAHGAWILA, PANADURA"
+  },
+  {
+    "id": "02161",
+    "name": "MAHAYALA SIRISUMANA P.V.",
+    "address": "MAHAYALA, ANUGURUWATHOTA"
+  },
+  {
+    "id": "02380",
+    "name": "MAKALANDAWA K.V.",
+    "address": "MAKALANDAWA, WALALLAVITA VIA, MATHUGAMA"
+  },
+  {
+    "id": "02449",
+    "name": "MALABODA TAMIL V.",
+    "address": "DODAMGODA"
+  },
+  {
+    "id": "02296",
+    "name": "MALEGODA K.V.",
+    "address": "MALEGODA PAYAGALA"
+  },
+  {
+    "id": "02289",
+    "name": "MALEWANA SRI PAGNGNANANDA V.",
+    "address": "BADANAGODA, KALAWILA, BERUWALA"
+  },
+  {
+    "id": "02354",
+    "name": "MALIYADEWA P.V.",
+    "address": "MARAGAHADENIYA, BADURALIYA"
+  },
+  {
+    "id": "02047",
+    "name": "MALLAMULLA M.V.",
+    "address": "MALAMULLA PANADURA"
+  },
+  {
+    "id": "02106",
+    "name": "MANANA SRI GNANARATHANA K.V.",
+    "address": "PORUWADANDA"
+  },
+  {
+    "id": "02088",
+    "name": "MAPUTUGALA M.V.",
+    "address": "PORUWADHANDA"
+  },
+  {
+    "id": "02319",
+    "name": "MASSALA PRIMARY SCHOOL",
+    "address": "MASSALA BERUWALA"
+  },
+  {
+    "id": "02181",
+    "name": "MATUGAMA ANANDA SASTRALAYA",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02180",
+    "name": "MATUGAMA C.W.W. KANNANGARA M.M.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02468",
+    "name": "MATUGAMA E.W. ADIKARAM M.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02189",
+    "name": "MATUGAMA ST. MARY'S M.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02271",
+    "name": "MAWALA K.V.",
+    "address": "MAWALA, WADDUWA"
+  },
+  {
+    "id": "02357",
+    "name": "MEEGAHATHENNA MERIL KARIYAWASAM M.M.V.",
+    "address": "MEEGAHATHENNA"
+  },
+  {
+    "id": "02393",
+    "name": "MEEGAHATHENNA P.V.",
+    "address": "MEEGAHATHENNA"
+  },
+  {
+    "id": "02217",
+    "name": "MEEGAMA K.V.",
+    "address": "MEEGAMA, DHARGA TOWN"
+  },
+  {
+    "id": "02090",
+    "name": "MEEWANAPALANA M.V.",
+    "address": "MEEWANAPALANA, HORANA"
+  },
+  {
+    "id": "02125",
+    "name": "MENERIGAMA P.V.",
+    "address": "HANDAPANGODA"
+  },
+  {
+    "id": "02036",
+    "name": "METHODIST P.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02349",
+    "name": "MIDALANA JANAPADA P.V.",
+    "address": "MORAPITIYA"
+  },
+  {
+    "id": "02333",
+    "name": "MIDALANA P.V.",
+    "address": "MIDALANA, BADURALIYA"
+  },
+  {
+    "id": "02417",
+    "name": "MILLAKANDE T M.V.",
+    "address": "BULATHSINGHALA"
+  },
+  {
+    "id": "02048",
+    "name": "MILLANIYA SRI DEWARAKSHITHA M.V.",
+    "address": "MILLANIYA"
+  },
+  {
+    "id": "02089",
+    "name": "MILLEWA M.V.",
+    "address": "MILLEWA, HORANA"
+  },
+  {
+    "id": "02124",
+    "name": "MILLEWA P.V.",
+    "address": "MILLEWA"
+  },
+  {
+    "id": "02419",
+    "name": "MILLEWA TAMIL P.V.",
+    "address": "MILLEWA ESTATE, MILLEWA"
+  },
+  {
+    "id": "02334",
+    "name": "MINIKANDALA P.V.",
+    "address": "MORAPITIYA"
+  },
+  {
+    "id": "02464",
+    "name": "MIRISHENA TAMIL P.V.",
+    "address": "BULATHSINGHALA"
+  },
+  {
+    "id": "02381",
+    "name": "MIRISWATTA M.V.",
+    "address": "MIRISWATTA PELAWATTA"
+  },
+  {
+    "id": "02460",
+    "name": "MIRISWATTA TAMIL V.",
+    "address": "ITTAPANA"
+  },
+  {
+    "id": "02028",
+    "name": "MOLLIGODA P.V.",
+    "address": "MOLLEGODA, WADDUWA"
+  },
+  {
+    "id": "02105",
+    "name": "MORAGAHAHENA M.V.",
+    "address": "MORAGAHAHENA, MILLAWA"
+  },
+  {
+    "id": "02394",
+    "name": "MORAGALA SIRI SUNANDA P.V.",
+    "address": "MORAGALA, MEEGAHATHENNA"
+  },
+  {
+    "id": "02303",
+    "name": "MORAGALLA JUNIOR SCHOOL",
+    "address": "MORAGALLA, BERUWALA"
+  },
+  {
+    "id": "02270",
+    "name": "MORONTHUDUWA DHAMMANANDA M.V.",
+    "address": "MORONTHUDUWA"
+  },
+  {
+    "id": "02335",
+    "name": "MULATIYANA P.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02302",
+    "name": "MUNHENA KANISHTA VIDYALAYA",
+    "address": "MUNHENA, MAGGONA"
+  },
+  {
+    "id": "02269",
+    "name": "MUSAEUS K.V.",
+    "address": "KALUTARA"
+  },
+  {
+    "id": "02264",
+    "name": "NAGODA GALLASSA P.V.",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02251",
+    "name": "NAGODA M.V.",
+    "address": "NAGODA, KALUTARA"
+  },
+  {
+    "id": "02137",
+    "name": "NAHALLA SRI REWATHA M.V.",
+    "address": "NAHALLA, NEBODA"
+  },
+  {
+    "id": "02006",
+    "name": "NALLURUWA SIRI SEEVALI K.V.",
+    "address": "NALLURUWA, PANADURA"
+  },
+  {
+    "id": "02102",
+    "name": "NAMBAPANA K.V.",
+    "address": "NAMBAPANA, INGIRIYA"
+  },
+  {
+    "id": "02209",
+    "name": "NARAWILA P.V.",
+    "address": "NARAWILA, MATUGAMA"
+  },
+  {
+    "id": "02184",
+    "name": "NAVUTHTHUDUWA M.V.",
+    "address": "NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02211",
+    "name": "NEBODA M.V.",
+    "address": "NEBODA"
+  },
+  {
+    "id": "02210",
+    "name": "NEHINNA K.V.",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02437",
+    "name": "NEUCHATAL TAMIL K.V.",
+    "address": "NEBODA"
+  },
+  {
+    "id": "02174",
+    "name": "NIGGAHA P.V.",
+    "address": "NIGGAHA, BULATHSINHALA"
+  },
+  {
+    "id": "02365",
+    "name": "NORTH ITTAPANA SRI SARANANKARA P.V.",
+    "address": "ITTAPANA"
+  },
+  {
+    "id": "02086",
+    "name": "OLABODUWA SRI SUMANGALA M.V.",
+    "address": "OLABODUWA, GONAPOLA JUNCTION"
+  },
+  {
+    "id": "02146",
+    "name": "OMATTA JANAPADA K.V.",
+    "address": "MAHAGAMA"
+  },
+  {
+    "id": "02145",
+    "name": "OMATTA K.V.",
+    "address": "OMATTA, AGALAWATTA"
+  },
+  {
+    "id": "02182",
+    "name": "OVITIGALA M.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02227",
+    "name": "OVITIGALA P.V.",
+    "address": "OVITIGALA, MATUGAMA"
+  },
+  {
+    "id": "02104",
+    "name": "P.M.PERERA K.V.",
+    "address": "BATUWITA, GONAPOLA JUNCTION"
+  },
+  {
+    "id": "02287",
+    "name": "PADAGODA MAHA VIDYALAYA",
+    "address": "PADAGODA BERUWALA"
+  },
+  {
+    "id": "02338",
+    "name": "PAGNGNASENA K.V.",
+    "address": "LATHPANDURA, BADURALIYA"
+  },
+  {
+    "id": "02175",
+    "name": "PAHALA KARANNAGODA P.V.",
+    "address": "WARAKAGODA, NEBODA"
+  },
+  {
+    "id": "02087",
+    "name": "PALANNORUWA M.M.V.",
+    "address": "PALANNORUWA, GONAPOLA JUNCTION"
+  },
+  {
+    "id": "02478",
+    "name": "PALANNORUWA P.V.",
+    "address": "PALANNORUWA, GONAPALA JUNCTION"
+  },
+  {
+    "id": "02288",
+    "name": "PALAYANGODA KANISHTA VIDYALAYA",
+    "address": "PALAYANGODA, PAYAGALA"
+  },
+  {
+    "id": "02450",
+    "name": "PALLEGODA TAMIL P.V.",
+    "address": "NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02039",
+    "name": "PANADURA AGAMETHI BALIKA M.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02431",
+    "name": "PANADURA AL-FAHRIYA CENTRAL COLLEGE",
+    "address": "THOTAWATHA PANADURA"
+  },
+  {
+    "id": "02002",
+    "name": "PANADURA BALIKA M.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02012",
+    "name": "PANADURA BAUDDHALOKA M.V.",
+    "address": "WEKADA, PANADURA"
+  },
+  {
+    "id": "02432",
+    "name": "PANADURA JEELAN CENTRAL COLLEGE",
+    "address": "HENAMULLA PANADUARA"
+  },
+  {
+    "id": "02034",
+    "name": "PANADURA ROYAL COLLEGE",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02005",
+    "name": "PANADURA SRI SUMANGALA BALIKA M.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02004",
+    "name": "PANADURA SRI SUMANGALA COLLEGE",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02009",
+    "name": "PANADURA ST. ANTHONY'S BOYS M.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02010",
+    "name": "PANADURA ST. ANTHONY'S GIRLS SCHOOL",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02003",
+    "name": "PANADURA ST. JOHN'S M.V.",
+    "address": "UDAHAMULLA, PANADURA"
+  },
+  {
+    "id": "02252",
+    "name": "PANAPITIYA AGAMETHI K.V.",
+    "address": "PANAPITIYA, WASKADUWA"
+  },
+  {
+    "id": "02375",
+    "name": "PANNILA P.V.",
+    "address": "PANNILA, VIA MATHUGAMA"
+  },
+  {
+    "id": "02212",
+    "name": "PANTHIYA M.V.",
+    "address": "PANTHIYA, MATUGAMA"
+  },
+  {
+    "id": "02045",
+    "name": "PARAGASTHOTA VIDYALOKA M.V.",
+    "address": "PARAGASTHOTA"
+  },
+  {
+    "id": "02156",
+    "name": "PARAGODA KITHULAGODA K.V.",
+    "address": "PARAGODA, BULATHSINHALA"
+  },
+  {
+    "id": "02362",
+    "name": "PAREIGAMA K.V.",
+    "address": "PAREIGAMA"
+  },
+  {
+    "id": "02046",
+    "name": "PATHAHAWATHTHA SRI SWARNAJOTHI K.V.",
+    "address": "RAIGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02058",
+    "name": "PATHAKADA K.V.",
+    "address": "PATHAKADA, GALPATHA"
+  },
+  {
+    "id": "02311",
+    "name": "PATHIRAJAGODA PRIMARY SCHOOL",
+    "address": "PATHIRAJAGODA DARGA TOWN"
+  },
+  {
+    "id": "02280",
+    "name": "PAYAGALA BANDARANAYAKA M.V.",
+    "address": "PAYAGALA"
+  },
+  {
+    "id": "02463",
+    "name": "PAYAGALA HINDU COLLEGE",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02286",
+    "name": "PAYAGALA SAMUDRADEVI BALIKA VIDYALAYA",
+    "address": "PINIDIYAMULLA PAYAGALA"
+  },
+  {
+    "id": "02213",
+    "name": "PELAPITIYAGODA KUSALAGHANA K.V.",
+    "address": "TEBUWANA"
+  },
+  {
+    "id": "02363",
+    "name": "PELAWATTA M.V.",
+    "address": "PELAWATTA, VIA MATHUGAMA"
+  },
+  {
+    "id": "02325",
+    "name": "PELENDA K.V.",
+    "address": "PELENDA"
+  },
+  {
+    "id": "02456",
+    "name": "PELENDA MUSLIM K.V.",
+    "address": "PELENDA, AGALAWATTA"
+  },
+  {
+    "id": "02454",
+    "name": "PELENDA TAMIL V.",
+    "address": "BADURALIYA"
+  },
+  {
+    "id": "02059",
+    "name": "PELPOLA K.V.",
+    "address": "GALPATHA"
+  },
+  {
+    "id": "02422",
+    "name": "PERTH TAMIL P.V.",
+    "address": "PORUWADANDA"
+  },
+  {
+    "id": "02458",
+    "name": "PIMBURA TAMIL P.V.",
+    "address": "AGALAWATTA"
+  },
+  {
+    "id": "02014",
+    "name": "PINWATTA P.V.",
+    "address": "PINWATTA, PANADURA"
+  },
+  {
+    "id": "02267",
+    "name": "POHADDARAMULLA K.V.",
+    "address": "POHADDARAMULLA, WADDUWA"
+  },
+  {
+    "id": "02138",
+    "name": "POLEGODA M.V.",
+    "address": "POLEGODA, MAHAGAMA"
+  },
+  {
+    "id": "02247",
+    "name": "POTHUPITIYA M.V.",
+    "address": "POTHUPITIYA, WADDUWA"
+  },
+  {
+    "id": "02281",
+    "name": "POTHUWILA NAVODYA VIDYALAYA",
+    "address": "POTHUWILA PAYAGALA"
+  },
+  {
+    "id": "02401",
+    "name": "PUSSAWALA P.V.",
+    "address": "PUSSAWALA PELAWATTA"
+  },
+  {
+    "id": "02423",
+    "name": "RAIGAM SARASWATHI TAMIL K.V.",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02129",
+    "name": "RAIGAMWATHTHA PARAKRAMABAHU P.V.",
+    "address": "MAHA INGIRIYA, INGIRIYA"
+  },
+  {
+    "id": "02272",
+    "name": "RAJAGURU SRI SUBHUTHI M.V.",
+    "address": "WASKADUWA"
+  },
+  {
+    "id": "02476",
+    "name": "RAJAGURU SRI SUBHUTHI P.V.",
+    "address": "WASKADUWA"
+  },
+  {
+    "id": "02064",
+    "name": "RAMUKKANA VIDYALOKA K.V.",
+    "address": "RAMUKKANA, BANDARAGAMA"
+  },
+  {
+    "id": "02395",
+    "name": "RANEPURAGODA P.V.",
+    "address": "RANEPURAGODA PAHALA HEWESSA"
+  },
+  {
+    "id": "02385",
+    "name": "RATHMALE K.V.",
+    "address": "RATHMALE, POLGAMPALA"
+  },
+  {
+    "id": "02030",
+    "name": "RATHWATHTH DIYAMANTHI JUBILEE VIDYALAYA",
+    "address": "JUBLEE RD, WALANA, PANADURA"
+  },
+  {
+    "id": "02164",
+    "name": "RATIYALA SRI P.V.",
+    "address": "RATIYALA, GOVINNA"
+  },
+  {
+    "id": "02140",
+    "name": "REMUNA M.V.",
+    "address": "REMUNA, ANGURUWATOTA"
+  },
+  {
+    "id": "02082",
+    "name": "RERUKANA SAMARANAYAKAPURA P.V.",
+    "address": "RERUKANA, BANDARAGAMA"
+  },
+  {
+    "id": "02373",
+    "name": "S.A. WELGAMA K.V.",
+    "address": "DIYAPATHTHUGAMA, POLGAMPOLA"
+  },
+  {
+    "id": "02429",
+    "name": "S.TAMIL FRANCIS TAMIL P.V.",
+    "address": "GALAHENA, BULATHSINGHALA"
+  },
+  {
+    "id": "02092",
+    "name": "SAGARAPALANSOORIYA M.V.",
+    "address": "HANDAPANGODA"
+  },
+  {
+    "id": "02300",
+    "name": "SANTHA VISENTHI VIDYALAYA",
+    "address": "DIYALAGODA, MAGGONA"
+  },
+  {
+    "id": "02197",
+    "name": "SARALANKARA THISSA K.V.",
+    "address": "INDIGASTHUDUWA, DHARGA TOWN"
+  },
+  {
+    "id": "02037",
+    "name": "SARIKKALIMULLA R.C.P.V.",
+    "address": "KESELWATHTHA, PANADURA"
+  },
+  {
+    "id": "02008",
+    "name": "SARIKKAMULLA SRI THAKSALA M.V.",
+    "address": "SARIKKAMULLA, PANADURA"
+  },
+  {
+    "id": "02061",
+    "name": "SETHNADEE P.V.",
+    "address": "BOLGODA, BANDARAGAMA"
+  },
+  {
+    "id": "02442",
+    "name": "SIRIKANDURA TAMIL P.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02095",
+    "name": "SIRIMEWAN K.V.",
+    "address": "POKUNUWITA"
+  },
+  {
+    "id": "02234",
+    "name": "SIRINIWASA P.V.",
+    "address": "WALAGEDARA"
+  },
+  {
+    "id": "02019",
+    "name": "SISU VIRU VIDYALAYA",
+    "address": "GORAKANA, KESELWATHTHA"
+  },
+  {
+    "id": "02268",
+    "name": "SRI DEVANANDA K.V.",
+    "address": "BOTHUWAWATTA, KALUTARA"
+  },
+  {
+    "id": "02150",
+    "name": "SRI GUNARATHANA K.V.",
+    "address": "GIRIKOLA, AGALAWATTA"
+  },
+  {
+    "id": "02336",
+    "name": "SRI MEDANKARA K.V., YATIYANA",
+    "address": "YATIYANA, AGALAWATTA"
+  },
+  {
+    "id": "02171",
+    "name": "SRI RAHULA P.V.",
+    "address": "KIRIMETIWALAKADA, KOBAWAKA, GOVINNA"
+  },
+  {
+    "id": "02462",
+    "name": "SRI RAMAKRISHNA K.V.",
+    "address": "BADURALIYA"
+  },
+  {
+    "id": "02297",
+    "name": "SRI SAMBUDDARAJA KANISHTA VIDYALAYA",
+    "address": "MAGGONA"
+  },
+  {
+    "id": "02043",
+    "name": "SRI SARALANKARA M.V.",
+    "address": "KIDELPITIYA, WELMILLA JUNCTION"
+  },
+  {
+    "id": "02176",
+    "name": "SRI SARANANDA P.V.",
+    "address": "PAHALA NARAGALA, GOVINNA"
+  },
+  {
+    "id": "02222",
+    "name": "SRI SARANATHISSA K.V.",
+    "address": "YATADOLAWATHTHA, MATUGAMA"
+  },
+  {
+    "id": "02339",
+    "name": "SRI SIDDHARTHA K.V.",
+    "address": "LATHPANDURA, BADURALIYA"
+  },
+  {
+    "id": "02120",
+    "name": "SRI SRIDDHARTHA K.V.",
+    "address": "WEWA RD, PORUWADANDA"
+  },
+  {
+    "id": "02275",
+    "name": "SRI SUNANDA P.V.",
+    "address": "BANDARAGAMA RD, WASKADUWA"
+  },
+  {
+    "id": "02274",
+    "name": "SUGATHA K.V.",
+    "address": "GALLE RD, KALUTARA NORTH"
+  },
+  {
+    "id": "02101",
+    "name": "THALAGALA P.V.",
+    "address": "THALAGALA, GONAPALA"
+  },
+  {
+    "id": "02057",
+    "name": "THALAHITIYA K.V.",
+    "address": "THALAHITIYA JUNCTION, KALUTARA"
+  },
+  {
+    "id": "02400",
+    "name": "THALPEDIWALA P.V.",
+    "address": "THALPEDIWALA, MEEGAHATHENNA"
+  },
+  {
+    "id": "02021",
+    "name": "THALPITIYA P.V.",
+    "address": "THALPITIYA, WADDUWA"
+  },
+  {
+    "id": "02020",
+    "name": "THANTHIRIMULLA P.V.",
+    "address": "THANTHIRIMULLA, PANADURA"
+  },
+  {
+    "id": "02356",
+    "name": "THAWANA P.V.",
+    "address": "MORAPITIYA"
+  },
+  {
+    "id": "02208",
+    "name": "THEBUWANA K.V.",
+    "address": "THEBUWANA"
+  },
+  {
+    "id": "02386",
+    "name": "THINIYAWALA M.V.",
+    "address": "THINIYAWALA VIA, MATHUGAMA"
+  },
+  {
+    "id": "02207",
+    "name": "TUDUGALA WIMALASARA K.V.",
+    "address": "DODAMGODA"
+  },
+  {
+    "id": "02134",
+    "name": "UDAWELA SRI PIYARATHANA M.V.",
+    "address": "UDAWELA, AGALAWATTA"
+  },
+  {
+    "id": "02367",
+    "name": "UDUGAMA K.V.",
+    "address": "YAGIRALA"
+  },
+  {
+    "id": "02096",
+    "name": "UDUWA K.V.",
+    "address": "UDUWA SOUTH, KUDA UDUWA, HORANA"
+  },
+  {
+    "id": "02051",
+    "name": "UDUWARA K.V.",
+    "address": "UDUWARA, GALPATHA"
+  },
+  {
+    "id": "02248",
+    "name": "UGGALBODA M.V.",
+    "address": "UGGALBODA, KALUTARA"
+  },
+  {
+    "id": "02022",
+    "name": "UPADYA M.V.",
+    "address": "PANADURA"
+  },
+  {
+    "id": "02368",
+    "name": "URAGODA P.V.",
+    "address": "URAGODA, WELIPENNA"
+  },
+  {
+    "id": "02097",
+    "name": "URUGALA SRI DHARMALOKA K.V.",
+    "address": "URUGALA, INGIRIYA"
+  },
+  {
+    "id": "02273",
+    "name": "VELAPURA M.V.",
+    "address": "KALUTARA SOUTH"
+  },
+  {
+    "id": "02415",
+    "name": "VEYANGALLA MUSLIM M.V.",
+    "address": "VEYANGALLA, AGALAWATTA"
+  },
+  {
+    "id": "02073",
+    "name": "VIDYARAJA K.V., VENIVELPITIYA",
+    "address": "HALTHOTA"
+  },
+  {
+    "id": "02157",
+    "name": "VIHARTHA P.V., PIMBURA",
+    "address": "PIMBURA, AGALAWATTA"
+  },
+  {
+    "id": "02430",
+    "name": "VIPULANANDA TAMIL VIDYALAYA",
+    "address": "INGIRIYA"
+  },
+  {
+    "id": "02455",
+    "name": "VIVEKANANDA TAMIL K.V.",
+    "address": "MARAGAHADENIYA, BADURALIYA"
+  },
+  {
+    "id": "02453",
+    "name": "VOGAN TAMIL P.V.",
+    "address": "MATUGAMA"
+  },
+  {
+    "id": "02032",
+    "name": "WADDUWA B.V.",
+    "address": "WADDUWA"
+  },
+  {
+    "id": "02473",
+    "name": "WADDUWA CENTRAL PRIMARY SCHOOL",
+    "address": "WIJAYA RD, MOLLIGODA"
+  },
+  {
+    "id": "02015",
+    "name": "WADDUWA DHARMAPALA VIDYALAYA",
+    "address": "WADDUWA"
+  },
+  {
+    "id": "02001",
+    "name": "WADDUWA M M.V.",
+    "address": "VIJAYA RD, WADDUWA"
+  },
+  {
+    "id": "02013",
+    "name": "WADDUWA ST. MARY'S M.V.",
+    "address": "CONVENT RD, WADDUWA"
+  },
+  {
+    "id": "02233",
+    "name": "WADUGAMA SADANANDA P.V.",
+    "address": "DODANGODA"
+  },
+  {
+    "id": "02188",
+    "name": "WALAGEDARA M.V.",
+    "address": "GALMATHTHA, WALAGEDARA"
+  },
+  {
+    "id": "02350",
+    "name": "WALAKADA P.V.",
+    "address": "WALAKADA, MOLKAWA"
+  },
+  {
+    "id": "02359",
+    "name": "WALALLAWITA M.V.",
+    "address": "WALALLAWITA"
+  },
+  {
+    "id": "02007",
+    "name": "WALANA MAHANAMA M.V.",
+    "address": "WALANA, PANADURA"
+  },
+  {
+    "id": "02304",
+    "name": "WALATHARA KANISHTA VIDYALAYA",
+    "address": "WALATHARA BERUWALA"
+  },
+  {
+    "id": "02069",
+    "name": "WALGAMA SRI SADDHATHISSA M.V.",
+    "address": "WALGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02068",
+    "name": "WANDURAMULLA SRI RAHULA K.V.",
+    "address": "WANDURAMULLA, PANADURA"
+  },
+  {
+    "id": "02313",
+    "name": "WARAPITIYA K.V.",
+    "address": "WARAPITIYA DHARGA TOWN"
+  },
+  {
+    "id": "02351",
+    "name": "WATHURANA SRI SARASWATHI P.V.",
+    "address": "WATHURANA, BADURALIYA"
+  },
+  {
+    "id": "02132",
+    "name": "WAWULAGALA P.V.",
+    "address": "MUNAGAMA, HORANA"
+  },
+  {
+    "id": "02072",
+    "name": "WEEDAGAMA P.V.",
+    "address": "WEEDAGAMA, BANDARAGAMA"
+  },
+  {
+    "id": "02324",
+    "name": "WEEDIYABANDARA M.V.",
+    "address": "MORAPITIYA"
+  },
+  {
+    "id": "02094",
+    "name": "WEEDIYAGODA K.V.",
+    "address": "BANDARAGAMA"
+  },
+  {
+    "id": "02392",
+    "name": "WEERAKANDA P.V.",
+    "address": "WEERAKANDA, PELAWATTA"
+  },
+  {
+    "id": "02121",
+    "name": "WEERAMADDUMA BANDARA P.V.",
+    "address": "THALAGALA WEST, GONAPOLA JUNCION"
+  },
+  {
+    "id": "02167",
+    "name": "WEHERAWATTA P.V.",
+    "address": "WEHERAWATTA, ANGURUWATOTA"
+  },
+  {
+    "id": "02166",
+    "name": "WELGAMA K.V.",
+    "address": "MAHAGAMA"
+  },
+  {
+    "id": "02070",
+    "name": "WELIKALA TAXILA P.V.",
+    "address": "WELIKALA, POKUNUVITA"
+  },
+  {
+    "id": "02440",
+    "name": "WELIPENNA RAHMANIYA M.V.",
+    "address": "WELIPENNA"
+  },
+  {
+    "id": "02220",
+    "name": "WELIPENNA SINHALA K.V.",
+    "address": "WELIPENNA"
+  },
+  {
+    "id": "02221",
+    "name": "WELLATHA K.V.",
+    "address": "NEBODA"
+  },
+  {
+    "id": "02315",
+    "name": "WERAGALA SRI DEWAMITHTHA P.V.",
+    "address": "WERAGALA PAYAGALA"
+  },
+  {
+    "id": "02033",
+    "name": "WERAGAMA VIDYALAYA",
+    "address": "WADDUWA"
+  },
+  {
+    "id": "02041",
+    "name": "WEVITA MAITHREE M.V.",
+    "address": "WEVITA, BANDARAGAMA"
+  },
+  {
+    "id": "02337",
+    "name": "YAKUPITIYA SRI CHANDAVIMALA P.V.",
+    "address": "BELLANA"
+  },
+  {
+    "id": "02218",
+    "name": "YATADOLA K.V.",
+    "address": "NAVUTHTHUDUWA"
+  },
+  {
+    "id": "02163",
+    "name": "YATAGAMPITIYA K.V.",
+    "address": "YATAGAMPITIYA, BULATHSINHALA"
+  },
+  {
+    "id": "02063",
+    "name": "YATAWARA SHI GNANAWIMALA K.V.",
+    "address": "YATAWARA, JUNCTTON, KALUTARA SOUTH"
+  },
+  {
+    "id": "02402",
+    "name": "YATTAPATHA K.V.",
+    "address": "10 MILE POST, YATTAPATHA"
+  }
+]

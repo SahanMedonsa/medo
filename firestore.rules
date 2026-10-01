@@ -67,6 +67,39 @@ service cloud.firestore {
         && request.resource.data.created_at == resource.data.created_at;
       allow delete: if admin();
     }
+    match /ranking_papers/{id} {
+      function validPaper(data) {
+        return data.keys().hasAll(['name', 'date', 'created_at'])
+          && data.keys().hasOnly(['name', 'date', 'created_at'])
+          && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+          && data.date is string && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+          && data.created_at is string;
+      }
+      allow read: if true;
+      allow create: if admin() && validPaper(request.resource.data);
+      allow update: if admin() && validPaper(request.resource.data)
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if false;
+    }
+    match /ranking_entries/{id} {
+      function validEntry(data) {
+        return data.keys().hasAll(['paper_id', 'name', 'school', 'marks', 'created_at'])
+          && data.keys().hasOnly(['paper_id', 'name', 'school', 'marks', 'created_at', 'medium'])
+          && medium(data) in ['si', 'en']
+          && data.paper_id is string && data.paper_id.matches('^[0-9a-fA-F-]{36}$')
+          && exists(/databases/$(database)/documents/ranking_papers/$(data.paper_id))
+          && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+          && data.school is string && data.school.size() > 0 && data.school.size() <= 200
+          && data.marks is number && data.marks >= 0 && data.marks <= 10000
+          && data.created_at is string;
+      }
+      allow read: if true;
+      allow create: if admin() && validEntry(request.resource.data);
+      allow update: if admin() && validEntry(request.resource.data)
+        && request.resource.data.paper_id == resource.data.paper_id
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if admin();
+    }
     match /admins/{uid} {
       allow get: if request.auth != null && request.auth.uid == uid;
       allow list, write: if false;

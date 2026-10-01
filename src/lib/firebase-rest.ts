@@ -6,7 +6,7 @@ type Document = { name: string; fields?: Record<string, Value> };
 export function encodeFields(data: Record<string, unknown>) {
   return Object.fromEntries(Object.entries(data).map(([key, value]) => [key,
     value === null ? { nullValue: null } : typeof value === "boolean" ? { booleanValue: value } :
-    typeof value === "number" ? { integerValue: String(value) } : { stringValue: String(value) },
+    typeof value === "number" ? (Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value }) : { stringValue: String(value) },
   ]));
 }
 
@@ -45,7 +45,7 @@ export async function firebaseRequest(path: string, token?: string, init: Reques
     return Response.json({ id: data.users[0].localId, email: data.users[0].email });
   }
   const collection = url.pathname.split("/")[2];
-  if (!["admins", "modules", "lesson_folders", "pdfs", "pdf_folders"].includes(collection)) throw new Error("Unsupported collection");
+  if (!["admins", "modules", "lesson_folders", "pdfs", "pdf_folders", "ranking_papers", "ranking_entries"].includes(collection)) throw new Error("Unsupported collection");
   if (collection === "admins") {
     const uid = url.searchParams.get("user_id")?.replace(/^eq\./, "");
     if (!uid || init.method) return Response.json({}, { status: 400 });

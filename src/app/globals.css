@@ -336,3 +336,43 @@ button:disabled { opacity: .55; cursor: wait; }
   .tute-title-bar { padding-inline: 80px; }
   .tute-back { padding: 8px; }
 }
+
+.nav-category-group + .nav-category-group { margin-top: 14px; padding-top: 14px; border-top: 1px solid #cdd0d5; }
+.nav-category-heading { margin: 8px 18px 10px; color: #636b78; font-size: 14px; font-weight: 800; letter-spacing: .08em; }
+
+.rankings .tute-folder-summary h2 { margin: 0; font-size: 20px; overflow-wrap: anywhere; }
+.ranking-table-scroll { overflow-x: auto; background: white; border-radius: 16px; }
+.ranking-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+.ranking-table caption { padding: 16px; text-align: left; font-weight: 700; }
+.ranking-table th, .ranking-table td { padding: 14px 18px; border-bottom: 1px solid #ececf2; overflow-wrap: anywhere; }
+.ranking-table thead { background: #eeedff; color: #514879; }
+.ranking-table tbody th { font-weight: 600; }
+.ranking-table tbody tr:nth-child(even) { background: #fafafe; }
+
+.ranking-actions { display: flex; gap: 8px; align-items: center; }
+
+.ranking-paper-header { gap: 16px; }
+.ranking-paper-title { display: grid; gap: 5px; min-width: 0; }
+.ranking-paper-title time { font-size: 14px; color: #68707b; }
+.ranking-paper-logo { margin-left: auto; width: 190px; height: auto; object-fit: contain; }
+.ranking-podium { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px; }
+.ranking-student-card { --rank-accent: #806000; --rank-bg: #fff8da; display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 20px 16px; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--rank-accent) 25%, white); border-top: 5px solid var(--rank-accent); background: var(--rank-bg); }
+.ranking-color-2 { --rank-accent: #475569; --rank-bg: #eef2f6; }
+.ranking-color-3 { --rank-accent: #9a4e25; --rank-bg: #fff0e5; }
+.ranking-color-4 { --rank-accent: #5b42a0; --rank-bg: #f2edff; }
+.ranking-color-5 { --rank-accent: #17665a; --rank-bg: #e8f7f1; }
+.ranking-card-badge { display: flex; align-items: center; gap: 7px; color: var(--rank-accent); font-weight: 800; font-size: 15px; }
+.ranking-student-card h3 { margin: 0; font-size: 19px; line-height: 1.4; overflow-wrap: anywhere; }
+.ranking-card-school { margin: 0; font-size: 13px; line-height: 1.6; color: #48515e; overflow-wrap: anywhere; }
+.ranking-card-medium { font-size: 12px; color: #48515e; }
+.ranking-card-score { margin-top: auto; display: flex; align-items: baseline; gap: 7px; color: var(--rank-accent); }
+.ranking-card-score strong { font-size: 36px; line-height: 1.2; }
+.ranking-card-score span { font-size: 13px; }
+.ranking-student-card .ranking-actions { flex-wrap: wrap; }
+.ranking-student-card .secondary-button { padding: 8px 12px; font-size: 12px; }
+@media (max-width: 1200px) { .ranking-podium { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 700px) {
+  .ranking-podium { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ranking-paper-logo { width: 130px; }
+}
+@media (max-width: 420px) { .ranking-podium { grid-template-columns: 1fr; } }

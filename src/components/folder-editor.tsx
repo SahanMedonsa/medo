@@ -1,5 +1,7 @@
 "use client";
 
+import { categoryLabel } from "@/lib/modules";
+
 import { adminRequest } from "@/lib/demo-store";
 import { X } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -30,7 +32,7 @@ export default function FolderEditor({ folder, category, medium, demo = false, o
 
   return <dialog ref={dialog} className="video-editor-dialog" aria-labelledby="folder-title" onCancel={(event) => { if (busy) event.preventDefault(); else onClose(); }} onClick={(event) => { if (event.target === event.currentTarget && !busy) onClose(); }}>
     <section className="admin-panel">
-      <div className="editor-heading"><div><span className="admin-eyebrow">{category}</span><h2 id="folder-title">{folder ? "Edit lesson folder" : "Add lessons"}</h2></div><button className="close-button" aria-label="Close folder form" disabled={busy} onClick={onClose}><X size={22} /></button></div>
+      <div className="editor-heading"><div><span className="admin-eyebrow">{categoryLabel(category)}</span><h2 id="folder-title">{folder ? "Edit lesson folder" : "Add lessons"}</h2></div><button className="close-button" aria-label="Close folder form" disabled={busy} onClick={onClose}><X size={22} /></button></div>
       <p className="admin-caption">Create a folder for a topic, then add your videos inside.</p>
       <form className="module-form" onSubmit={save}><fieldset disabled={busy}>
         <label>Teaching medium<select name="medium" defaultValue={folder ? contentMedium(folder) : medium} disabled={!!folder}><option value="si">සිංහල · Sinhala medium</option><option value="en">English medium</option></select></label>

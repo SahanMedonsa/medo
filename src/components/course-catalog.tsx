@@ -6,9 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "@/components/login-form";
 import FolderEditor from "@/components/folder-editor";
+import Rankings from "@/components/rankings";
 import PdfTutes from "@/components/pdf-tutes";
 import VideoEditor from "@/components/video-editor";
-import { LessonFolder, VideoModule, Medium, contentMedium } from "@/lib/modules";
+import { LessonFolder, VideoModule, Medium, contentMedium, categoryLabel } from "@/lib/modules";
 import { BookOpen, FileClock, FileText, Info, MessageSquare, Search, X, Plus, FolderOpen, ArrowLeft, Award, Video, Phone, Send, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -22,17 +23,23 @@ function TiktokIcon() {
   return <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 2c.4 2.8 2 4.5 5 4.8v3.5a9 9 0 0 1-5-1.5V16a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2z" fill="#25f4ee" transform="translate(-.6 .6)" /><path d="M16 2c.4 2.8 2 4.5 5 4.8v3.5a9 9 0 0 1-5-1.5V16a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2z" fill="#fe2c55" transform="translate(.6 0)" /><path d="M16 2c.4 2.8 2 4.5 5 4.8v3.5a9 9 0 0 1-5-1.5V16a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V2z" fill="#161823" /></svg>;
 }
 
-const categories = [
-  { label: "2026 O/L Maths", icon: BookOpen },
-  { label: "Grade 10", icon: BookOpen },
-  { label: "General maths", icon: BookOpen },
-  { label: "AL Video Modules", icon: BookOpen },
-  { label: "Tutes", icon: FileText, divider: true },
-  { label: "#tute", icon: FileText },
-  { label: "A/L Past Papers", icon: FileClock, divider: true },
-  { label: "O/L Past Papers", icon: FileClock },
-  { label: "About Us", icon: MessageSquare, divider: true },
-  { label: "Contact Us", icon: Info },
+const categoryGroups = [
+  { label: "O/L", items: [
+    { id: "2026 O/L Maths", icon: BookOpen },
+    { id: "Grade 10", icon: BookOpen },
+    { id: "#tute", icon: FileText },
+    { id: "Tutes", icon: FileText },
+    { id: "O/L Past Papers", icon: FileClock },
+    { id: "Ranking", icon: Award },
+  ] },
+  { label: "A/L", items: [
+    { id: "AL Video Modules", icon: BookOpen },
+    { id: "A/L Past Papers", icon: FileClock },
+  ] },
+  { label: "", items: [
+    { id: "About Us", icon: MessageSquare },
+    { id: "Contact Us", icon: Info },
+  ] },
 ];
 
 function Brand({ compact = false }: { compact?: boolean }) {
@@ -174,21 +181,27 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
           <div className="drawer-top"><span>Browse courses</span></div>
           <label className="menu-search"><Search size={24} /><input placeholder="Search..." aria-label="Search menu" value={menuQuery} onChange={(event) => setMenuQuery(event.target.value)} /></label>
           <nav aria-label="Main navigation">
-            {categories.filter((item) => item.label.toLowerCase().includes(menuQuery.toLowerCase())).map(({ label, icon: Icon, divider }) => (
-              <button key={label} className={`nav-item ${category === label ? "active" : ""} ${divider ? "divider" : ""}`} aria-current={category === label ? "page" : undefined} onClick={() => navigate(label)}><Icon size={37} strokeWidth={1.8} /><span>{label}</span></button>
-            ))}
-            {!categories.some((item) => item.label.toLowerCase().includes(menuQuery.toLowerCase())) && <p className="menu-empty">No matching sections.</p>}
+            {categoryGroups.map((group) => {
+              const items = group.items.filter((item) => `${group.label} ${categoryLabel(item.id)}`.toLowerCase().includes(menuQuery.trim().toLowerCase()));
+              if (!items.length) return null;
+              return <div className="nav-category-group" key={group.label || "information"}>
+                {group.label && <h2 className="nav-category-heading">{group.label}</h2>}
+                {items.map(({ id, icon: Icon }) => <button key={id} className={`nav-item ${category === id ? "active" : ""}`} aria-current={category === id ? "page" : undefined} onClick={() => navigate(id)}><Icon size={37} strokeWidth={1.8} /><span>{categoryLabel(id)}</span></button>)}
+              </div>;
+            })}
+            {!categoryGroups.some((group) => group.items.some((item) => `${group.label} ${categoryLabel(item.id)}`.toLowerCase().includes(menuQuery.trim().toLowerCase()))) && <p className="menu-empty">No matching sections.</p>}
+
           </nav>
         </div>
       </aside>
 
       <main className="main-content">
-        {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? category}</h1>}
+        {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
         {notice && <p className="admin-message success" role="status">{notice}</p>}
-        {category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} /> : isCourse ? <>
-          {activeFolder && <div className="folder-detail"><button className="secondary-button folder-back" onClick={() => { setActiveFolderId(null); setQuery(""); }}><ArrowLeft size={16} /> All lessons · {category}</button><p>{activeFolder.description}</p><div className="folder-stats"><span><Video size={17} /> {lessons.filter((item) => item.folder_id === activeFolder.id && contentMedium(item) === medium).length} {admin ? "videos added" : "videos available"} / {activeFolder.planned_videos} planned</span><span><Award size={17} /> {activeFolder.marks} marks available</span>{admin && <button className="secondary-button" onClick={() => setFolderEditor({ folder: activeFolder })}>Edit folder details</button>}</div></div>}
-          <div className="catalog-toolbar"><span>{isTute ? "YouTube videos" : activeFolder ? "Videos in this lesson" : "Lesson folders"} · {category}</span><div className="catalog-controls">{admin && (activeFolder || isTute ? <button className="purchase-button add-video-button" onClick={() => setEditor({ lesson: null })}><Plus size={19} /> Add video</button> : <button className="purchase-button add-video-button" onClick={() => setFolderEditor({ folder: null })}><Plus size={19} /> Add lessons</button>)}<label className="lesson-search"><Search size={18} /><input aria-label="Search lessons" placeholder="Search lessons..." value={query} onChange={(event) => setQuery(event.target.value)} /></label></div></div>
+        {category === "Ranking" ? <Rankings key={String(demo)} admin={admin} demo={demo} /> : category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} /> : isCourse ? <>
+          {activeFolder && <div className="folder-detail"><button className="secondary-button folder-back" onClick={() => { setActiveFolderId(null); setQuery(""); }}><ArrowLeft size={16} /> All lessons · {categoryLabel(category)}</button><p>{activeFolder.description}</p><div className="folder-stats"><span><Video size={17} /> {lessons.filter((item) => item.folder_id === activeFolder.id && contentMedium(item) === medium).length} {admin ? "videos added" : "videos available"} / {activeFolder.planned_videos} planned</span><span><Award size={17} /> {activeFolder.marks} marks available</span>{admin && <button className="secondary-button" onClick={() => setFolderEditor({ folder: activeFolder })}>Edit folder details</button>}</div></div>}
+          <div className="catalog-toolbar"><span>{isTute ? "YouTube videos" : activeFolder ? "Videos in this lesson" : "Lesson folders"} · {categoryLabel(category)}</span><div className="catalog-controls">{admin && (activeFolder || isTute ? <button className="purchase-button add-video-button" onClick={() => setEditor({ lesson: null })}><Plus size={19} /> Add video</button> : <button className="purchase-button add-video-button" onClick={() => setFolderEditor({ folder: null })}><Plus size={19} /> Add lessons</button>)}<label className="lesson-search"><Search size={18} /><input aria-label="Search lessons" placeholder="Search lessons..." value={query} onChange={(event) => setQuery(event.target.value)} /></label></div></div>
           {!activeFolder && !isTute && <div className="lesson-grid folder-grid">{shownFolders.map((folder) => {
             const count = lessons.filter((lesson) => lesson.folder_id === folder.id && contentMedium(lesson) === medium).length;
             return <article className="lesson-folder-card" key={folder.id}>
@@ -250,7 +263,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
               { name: "Telegram", icon: Send, href: undefined, description: "Stay connected with lesson updates." },
             ].map(({ name, icon: Icon, description, href }) => <div className="contact-social-card" key={name}><Icon aria-hidden="true" /><h4>{name}</h4><p>{description}</p>{href ? <a className="contact-social-link" href={href} target="_blank" rel="noopener noreferrer">Official {name} <ArrowUpRight size={16} aria-hidden="true" /></a> : <span className="contact-pending">Link coming soon</span>}</div>)}</div>
           </section>
-          : <section className="empty-panel"><BookOpen size={40} /><h2>{category}</h2><p>Resources for this section will appear here when published.</p></section>}
+          : <section className="empty-panel"><BookOpen size={40} /><h2>{categoryLabel(category)}</h2><p>Resources for this section will appear here when published.</p></section>}
       </main>
       <footer><Brand compact /> <span>Learn at your own pace.</span>{admin && <Link href="/student">Student dashboard</Link>}</footer>
 

@@ -298,3 +298,58 @@ test("Folder API requires admin, saves metadata, and rejects missing parent fold
   assert.equal((await pdfs.POST(missingParent)).status, 400);
   assert.equal(writes, 2);
 });
+
+test("Rankings validate paper dates and student results and give tied marks equal ranks", async () => {
+  const { validateRankingPaper, validateRankingEntry, rankStudents } = await import(await source("../src/lib/rankings.ts"));
+  assert.deepEqual(validateRankingPaper({ name: " Paper 1 ", date: "2026-10-01" }), { name: "Paper 1", date: "2026-10-01" });
+  for (const date of ["2026-02-30", "bad", "2026-13-01"]) assert.throws(() => validateRankingPaper({ name: "Paper", date }));
+  const validEntry = { paper_id: uuid, name: "Student", school: "School", marks: 89.5 };
+  assert.equal(validateRankingEntry(validEntry).marks, 89.5);
+  assert.equal(validateRankingEntry(validEntry).medium, "si");
+  assert.equal(validateRankingEntry({ ...validEntry, medium: "en" }).medium, "en");
+  assert.throws(() => validateRankingEntry({ ...validEntry, medium: "invalid" }));
+  for (const change of [{ name: " " }, { school: "" }, { marks: -1 }, { marks: Infinity }, { marks: "90" }, { paper_id: "bad" }]) assert.throws(() => validateRankingEntry({ ...validEntry, ...change }));
+  assert.deepEqual(rankStudents([{ ...validEntry, id: "a", marks: 50 }, { ...validEntry, id: "b", marks: 90 }, { ...validEntry, id: "c", marks: 90 }]).map((row) => [row.id, row.rank]), [["b", 1], ["c", 1], ["a", 3]]);
+  const fields = encodeFields({ marks: 89.5 });
+  assert.equal(fields.marks.doubleValue, 89.5);
+  assert.equal(decodeDocument({ name: "entries/test", fields }).marks, 89.5);
+});
+
+test("Ranking API protects writes, validates parent papers, and supports editing", async (t) => {
+  const original = globalThis.fetch;
+  globalThis.testCookies = { get: () => undefined };
+  t.after(() => { globalThis.fetch = original; delete globalThis.testCookies; });
+  const rankingsUrl = await source("../src/lib/rankings.ts");
+  const route = await import(await source("../src/app/api/rankings/route.ts", { ...substitutions, '"@/lib/rankings"': JSON.stringify(rankingsUrl) }));
+  const request = (body, origin = "http://localhost:3000") => new Request("http://localhost:3000/api/rankings", { method: "POST", headers: { Origin: origin }, body: JSON.stringify(body) });
+  assert.equal((await route.POST(request({}))).status, 401);
+  assert.equal((await route.PATCH(request({}))).status, 401);
+  assert.equal((await route.DELETE(request({ id: uuid }))).status, 401);
+  globalThis.testCookies = { get: () => ({ value: "token" }) };
+  let parentExists = true, writes = 0, deletes = 0;
+  globalThis.fetch = async (url, options) => {
+    const address = String(url);
+    if (address.includes("accounts:lookup")) return Response.json({ users: [{ localId: "admin" }] });
+    if (address.includes("/admins/")) return Response.json({ name: "admins/admin", fields: {} });
+    if (options.method === "DELETE") { assert.ok(address.includes("/ranking_entries/" + uuid)); deletes++; return new Response(null, { status: 204 }); }
+    if (address.includes(":runQuery")) return Response.json([]);
+    if (options.method === "PATCH") { writes++; return Response.json({ name: "rankings/" + uuid, fields: JSON.parse(options.body).fields }); }
+    return parentExists ? Response.json({ name: "ranking_papers/" + uuid, fields: encodeFields({ name: "Paper", date: "2026-10-01" }) }) : new Response(null, { status: 404 });
+  };
+  assert.deepEqual(await (await route.GET()).json(), { papers: [], entries: [] });
+  assert.equal((await route.POST(request({ kind: "paper", name: "Paper", date: "2026-10-01" }))).status, 200);
+  const entry = { kind: "entry", paper_id: uuid, name: "Student", school: "School", marks: 89.5 };
+  assert.equal((await route.POST(request(entry))).status, 200);
+  const edited = await route.PATCH(request({ ...entry, id: uuid, marks: 95 }));
+  assert.equal(edited.status, 200);
+  assert.equal((await edited.json()).item.marks, 95);
+  assert.equal((await route.POST(request(entry, "https://other.example"))).status, 403);
+  parentExists = false;
+  assert.equal((await route.POST(request(entry))).status, 400);
+  assert.equal((await route.POST(request({ ...entry, marks: -2 }))).status, 400);
+  assert.equal((await route.DELETE(request({ id: "bad" }))).status, 400);
+  assert.equal((await route.DELETE(request({ id: uuid }, "https://other.example"))).status, 403);
+  assert.equal((await route.DELETE(request({ id: uuid }))).status, 200);
+  assert.equal(deletes, 1);
+  assert.equal(writes, 3);
+});
