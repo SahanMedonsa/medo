@@ -10,7 +10,7 @@ import Rankings from "@/components/rankings";
 import PdfTutes from "@/components/pdf-tutes";
 import VideoEditor from "@/components/video-editor";
 import { LessonFolder, VideoModule, Medium, contentMedium, categoryLabel } from "@/lib/modules";
-import { BookOpen, FileClock, FileText, Info, MessageSquare, Search, X, Plus, FolderOpen, ArrowLeft, Award, Video, Phone, Send, ArrowUpRight } from "lucide-react";
+import { BookOpen, FileClock, FileText, Info, MessageSquare, Search, X, Plus, FolderOpen, ArrowLeft, Award, Video, Phone, Send, ArrowUpRight, Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 function YoutubeIcon() {
@@ -51,6 +51,18 @@ function Brand({ compact = false }: { compact?: boolean }) {
 
 export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "admin" }) {
   const admin = mode === "admin";
+  const mobileMenu = useRef<HTMLDialogElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    if (!menuOpen) { mobileMenu.current?.close(); return; }
+    mobileMenu.current?.showModal();
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const media = window.matchMedia("(min-width: 761px)");
+    const closeOnDesktop = () => { if (media.matches) setMenuOpen(false); };
+    media.addEventListener("change", closeOnDesktop);
+    return () => { document.body.style.overflow = previous; media.removeEventListener("change", closeOnDesktop); };
+  }, [menuOpen]);
   const [medium, setMedium] = useState<Medium>("si");
   const [demo, setDemo] = useState(false);
   const [session, setSession] = useState<{ authenticated: boolean; email?: string } | null>(null);
@@ -108,6 +120,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
   }, [selectedLesson]);
 
   function navigate(label: string) {
+    setMenuOpen(false); setMenuQuery("");
     setCategory(label);
     setActiveFolderId(null);
     setNotice("");
@@ -165,20 +178,16 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
   }
   if (mode !== "public" && !session) return <main className="signin-page"><section className="signin-card"><p role={loadError ? "alert" : "status"}>{loadError || "Loading your dashboard…"}</p>{loadError && <button className="purchase-button" onClick={() => setReload((value) => value + 1)}>Try again</button>}</section></main>;
 
-  return (
-    <div className="site">
-      <header className="topbar">
-        <Brand />
-        <div className="catalog-account"><span className="status-badge">{admin ? "Admin dashboard" : "Learning space"}</span><label className="medium-selector"><span>Medium</span><select aria-label="Teaching medium" value={medium} onChange={(event) => {
+  const mediumSelector = (<label className="medium-selector"><span>Medium</span><select aria-label="Teaching medium" value={medium} onChange={(event) => {
           const next = event.target.value as Medium;
           setMedium(next); setActiveFolderId(null); setSelectedLesson(null); setQuery(""); setNotice("");
           try { localStorage.setItem("medonsa-medium", next); } catch {}
-        }}><option value="si">සිංහල · Sinhala</option><option value="en">English</option></select></label>{session?.email && <span className="account-email">{session.email}</span>}{demo ? <Link className="secondary-button" href={admin ? "/student" : "/admin"}>{admin ? "Student view" : "Admin dashboard"}</Link> : admin && <button className="secondary-button" disabled={actionBusy} onClick={signOut}>Sign out</button>}</div>
-      </header>
+        }}><option value="si">සිංහල · Sinhala</option><option value="en">English</option></select></label>);
 
-      <aside id="navigation" className="navigation-drawer" aria-label="Course navigation">
+  const navigation = (
         <div className="drawer-inner">
-          <div className="drawer-top"><span>Browse courses</span></div>
+          <div className="drawer-top"><span>Browse courses</span><button className="close-button mobile-menu-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><X size={22} /></button></div>
+          <div className="mobile-menu-medium">{mediumSelector}</div>
           <label className="menu-search"><Search size={24} /><input placeholder="Search..." aria-label="Search menu" value={menuQuery} onChange={(event) => setMenuQuery(event.target.value)} /></label>
           <nav aria-label="Main navigation">
             {categoryGroups.map((group) => {
@@ -193,8 +202,24 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
 
           </nav>
         </div>
+  );
+
+  return (
+    <div className="site">
+      <header className="topbar">
+        <button className="menu-button mobile-menu-trigger" aria-label="Open course menu" aria-haspopup="dialog" aria-expanded={menuOpen} aria-controls="mobile-course-menu" onClick={() => setMenuOpen(true)}><Menu size={25} /></button>
+        <Brand />
+        <div className="catalog-account"><span className="status-badge">{admin ? "Admin dashboard" : "Learning space"}</span>{mediumSelector}{session?.email && <span className="account-email">{session.email}</span>}{demo ? <Link className="secondary-button" href={admin ? "/student" : "/admin"}>{admin ? "Student view" : "Admin dashboard"}</Link> : admin && <button className="secondary-button" disabled={actionBusy} onClick={signOut}>Sign out</button>}</div>
+      </header>
+
+      <aside id="navigation" className="navigation-drawer" aria-label="Course navigation">
+        {navigation}
+
       </aside>
 
+      <dialog ref={mobileMenu} id="mobile-course-menu" className="mobile-course-menu" aria-label="Course navigation" onCancel={() => setMenuOpen(false)} onClose={() => setMenuOpen(false)} onClick={(event) => { if (event.target === event.currentTarget) setMenuOpen(false); }}>
+        {navigation}
+      </dialog>
       <main className="main-content">
         {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}

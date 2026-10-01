@@ -375,4 +375,57 @@ button:disabled { opacity: .55; cursor: wait; }
   .ranking-podium { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ranking-paper-logo { width: 130px; }
 }
-@media (max-width: 420px) { .ranking-podium { grid-template-columns: 1fr; } }
+
+.mobile-menu-trigger, .mobile-menu-close { display: none; }
+.mobile-course-menu { width: min(340px, 88vw); max-width: none; height: 100dvh; max-height: 100dvh; margin: 0 auto 0 0; padding: 0; border: 0; border-radius: 0 18px 18px 0; background: #ebebeb; color: #202936; overflow-y: auto; overscroll-behavior: contain; }
+.mobile-course-menu::backdrop { background: #11182780; }
+@media (max-width: 760px) {
+  .navigation-drawer { display: none; }
+  .mobile-menu-trigger, .mobile-menu-close { display: grid; flex-shrink: 0; min-width: 44px; min-height: 44px; }
+  .mobile-course-menu .drawer-inner { padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .mobile-course-menu nav { display: block; }
+  .mobile-course-menu .nav-item { min-height: 52px; padding: 12px; font-size: 15px; gap: 12px; }
+  .mobile-course-menu .nav-item svg { width: 25px; height: 25px; }
+  .topbar { flex-wrap: wrap; height: auto; min-height: 66px; padding-block: 8px; }
+  .topbar .catalog-account { width: 100%; margin-left: 0; flex-wrap: wrap; justify-content: flex-start; }
+  .ranking-podium { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .ranking-student-card { display: flex; flex-direction: column; gap: 7px; padding: 12px 10px; border-top-width: 1px; border-left: 4px solid var(--rank-accent); border-radius: 12px; }
+  .ranking-card-badge { grid-column: 1; font-size: 13px; gap: 5px; }
+  .ranking-card-badge svg { width: 18px; height: 18px; }
+  .ranking-student-card h3 { font-size: 15px; }
+  .ranking-card-school { grid-column: 1; font-size: 13px; line-height: 1.45; }
+  .ranking-card-medium { grid-column: 1; font-size: 12px; }
+  .ranking-card-score { margin-top: auto; padding-top: 6px; flex-direction: row; align-items: baseline; gap: 5px; }
+  .ranking-card-score strong { font-size: 28px; }
+  .ranking-student-card .ranking-actions { grid-column: 1 / -1; margin-top: 5px; }
+  .ranking-actions .secondary-button { min-height: 44px; }
+  .rankings .catalog-toolbar > span { display: block; font-size: 12px; }
+  .ranking-paper-header { gap: 10px; }
+  .rankings .ranking-paper-title h2 { font-size: 17px; }
+  .ranking-paper-title { flex: 1; }
+  .ranking-paper-logo { width: 100px; }
+  .ranking-table-scroll { overflow: visible; background: transparent; }
+  .ranking-table, .ranking-table tbody { display: block; }
+  .ranking-table caption { display: block; padding: 10px 0; font-size: 14px; }
+  .ranking-table thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); }
+  .ranking-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr); padding: 12px 14px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #e0e0e9; background: white; }
+  .ranking-table tbody tr:nth-child(even) { background: white; }
+  .ranking-table th, .ranking-table td { padding: 4px 0; border: 0; font-size: 13px; }
+  .ranking-table tbody th { font-size: 16px; padding-block: 5px 8px; }
+  .ranking-table td[data-label] { display: grid; grid-template-columns: 65px minmax(0, 1fr); gap: 10px; }
+  .ranking-table td[data-label]::before { content: attr(data-label); color: #68707b; font-size: 12px; font-weight: 600; }
+}
+
+.mobile-menu-medium { display: none; }
+@media (max-width: 760px) {
+  .topbar { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 8px; min-height: 72px; }
+  .topbar .mobile-menu-trigger { grid-column: 1; grid-row: 1; }
+  .topbar > .brand { grid-column: 2; grid-row: 1; justify-self: center; width: 190px; max-width: 100%; }
+  .topbar .catalog-account { grid-column: 1 / -1; justify-content: center; }
+  .topbar .medium-selector { display: none; }
+  .topbar .catalog-account:not(:has(.secondary-button)) { display: none; }
+  .mobile-course-menu .mobile-menu-medium { display: block; margin: 0 5px 18px; }
+  .mobile-menu-medium .medium-selector { flex-direction: column; align-items: stretch; gap: 8px; }
+  .mobile-menu-medium .medium-selector > span { display: block; font-weight: 600; }
+  .mobile-menu-medium select { width: 100%; min-height: 44px; font-size: 16px; }
+}
