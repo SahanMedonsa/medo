@@ -1,5 +1,7 @@
 "use client";
 
+import { ContentOrder, orderByCreated } from "@/lib/content-order";
+
 import Image from "next/image";
 import kalutaraSchools from "@/lib/kalutara-schools.json";
 import { FormEvent, useEffect, useRef, useState } from "react";
@@ -11,7 +13,7 @@ type Editor = { kind: "paper"; item?: RankingPaper } | { kind: "entry"; item?: R
 const demoKey = "medonsa-demo-rankings";
 function readDemo(): Data { return JSON.parse(localStorage.getItem(demoKey) || '{"papers":[],"entries":[]}'); }
 
-export default function Rankings({ admin, demo }: { admin: boolean; demo: boolean }) {
+export default function Rankings({ admin, demo, contentOrder }: { contentOrder?: ContentOrder; admin: boolean; demo: boolean }) {
   const [data, setData] = useState<Data>({ papers: [], entries: [] });
   const [activeId, setActiveId] = useState<string | null>(null);
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -119,7 +121,20 @@ export default function Rankings({ admin, demo }: { admin: boolean; demo: boolea
       </div>}
       {ranked.length > 5 && <div className="ranking-table-scroll"><table className="ranking-table"><caption>Other students · {paper.name} · {paper.date}</caption><thead><tr><th scope="col">Rank</th><th scope="col">Student name</th><th scope="col">School</th><th scope="col">Medium</th><th scope="col">Marks</th>{admin && <th scope="col">Actions</th>}</tr></thead><tbody>{ranked.slice(5).map((entry) => <tr key={entry.id}><td data-label="Rank">{entry.rank}</td><th scope="row">{entry.name}</th><td data-label="School">{entry.school}</td><td data-label="Medium">{entry.medium === "en" ? "English" : "Sinhala"}</td><td data-label="Marks">{entry.marks}</td>{admin && <td><div className="ranking-actions"><button className="secondary-button" disabled={busy} onClick={() => edit({ kind: "entry", item: entry })}>Edit</button><button className="secondary-button danger-button" disabled={busy} onClick={() => remove(entry)}>Delete</button></div></td>}</tr>)}</tbody></table></div>}
       {!ranked.length && <p className="admin-caption">{admin ? "Add the first student’s name, marks, and school." : "Results will appear here when added."}</p>}
-    </> : <><div className="lesson-grid folder-grid">{[...data.papers].sort((a, b) => b.date.localeCompare(a.date)).map((item) => <article className="lesson-folder-card" key={item.id}><span className="folder-symbol"><Award size={28} /></span><h2>{item.name}</h2><time dateTime={item.date}>{item.date}</time><p className="admin-caption">{data.entries.filter((entry) => entry.paper_id === item.id).length} students</p><div className="card-actions">{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div></article>)}</div>{!data.papers.length && !error && <p className="admin-caption">{admin ? "Add a paper name and date to get started." : "Paper rankings will appear here when added."}</p>}</>}
+    </> : <><div className="lesson-grid folder-grid">{(admin && contentOrder ? orderByCreated(data.papers, contentOrder) : [...data.papers].sort((a, b) => b.date.localeCompare(a.date))).map((item) => {
+      const students = rankStudents(data.entries.filter((entry) => entry.paper_id === item.id));
+      const winners = students.filter((entry) => entry.rank === 1);
+      return <article className="lesson-folder-card ranking-paper-card" key={item.id}>
+        <div className="ranking-paper-card-body">
+          <div className="ranking-paper-card-details"><span className="folder-symbol"><Award size={28} /></span><h2>{item.name}</h2><time dateTime={item.date}>{item.date}</time><p className="admin-caption">{students.length} students</p></div>
+          {winners.length > 0 && <aside className="ranking-paper-winners" aria-label="First-ranked students">
+            <span className="ranking-paper-winner-label"><Award size={16} aria-hidden="true" /> Rank 1</span>
+            {winners.map((winner) => <div className="ranking-paper-winner" key={winner.id}><h3>{winner.name}</h3><strong>{winner.marks} <span>marks</span></strong><p>{winner.school}</p></div>)}
+          </aside>}
+        </div>
+        <div className="card-actions">{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
+      </article>;
+    })}</div>{!data.papers.length && !error && <p className="admin-caption">{admin ? "Add a paper name and date to get started." : "Paper rankings will appear here when added."}</p>}</>}
     <dialog ref={dialog} className="video-editor-dialog" aria-labelledby="ranking-editor-title" onCancel={(event) => { if (busy) event.preventDefault(); else setEditor(null); }}>
       {editor && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-editor-title">{editor.item ? "Edit" : "Add"} {editor.kind === "paper" ? "paper" : "student result"}</h2><button className="close-button" aria-label="Close editor" disabled={busy} onClick={() => setEditor(null)}><X size={22} /></button></div>
         <form className="module-form" key={`${editor.kind}-${editor.item?.id ?? "new"}`} onSubmit={save}><fieldset disabled={busy}>

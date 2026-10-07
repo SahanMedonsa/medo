@@ -11,9 +11,12 @@ async function source(path, replacements = {}) {
 const configUrl = await source("../src/lib/firebase-config.ts");
 const restUrl = await source("../src/lib/firebase-rest.ts", { '"./firebase-config"': JSON.stringify(configUrl) });
 const modulesUrl = await source("../src/lib/modules.ts");
+const onlineClassesUrl = await source("../src/lib/online-classes.ts");
+const { validateOnlineClass } = await import(onlineClassesUrl);
 const cookieUrl = "data:text/javascript," + encodeURIComponent("export async function cookies() { return globalThis.testCookies; }");
 const backendUrl = await source("../src/lib/backend.ts", { '"next/headers"': JSON.stringify(cookieUrl), '"./firebase-rest"': JSON.stringify(restUrl) });
 const substitutions = { '"next/headers"': JSON.stringify(cookieUrl), '"@/lib/backend"': JSON.stringify(backendUrl), '"@/lib/modules"': JSON.stringify(modulesUrl) };
+const onlineClasses = await import(await source("../src/app/api/online-classes/route.ts", { ...substitutions, '"@/lib/online-classes"': JSON.stringify(onlineClassesUrl) }));
 const admin = await import(await source("../src/app/api/admin/route.ts", substitutions));
 const catalogUrl = await source("../src/app/api/modules/route.ts", substitutions);
 const catalog = await import(catalogUrl);
@@ -352,4 +355,24 @@ test("Ranking API protects writes, validates parent papers, and supports editing
   assert.equal((await route.DELETE(request({ id: uuid }))).status, 200);
   assert.equal(deletes, 1);
   assert.equal(writes, 3);
+});
+
+
+test("Online classes validate titles, sections, media and safe Zoom meeting links", () => {
+  const valid = { title: "  Algebra live  ", zoom_url: "https://us02web.zoom.us/j/123456789?pwd=secret", section: "ol", medium: "si" };
+  assert.equal(validateOnlineClass(valid).title, "Algebra live");
+  for (const zoom_url of ["https://zoom.us/my/teacher", "https://zoom.com/j/123", "https://zoom.us/w/123"]) assert.equal(validateOnlineClass({ ...valid, zoom_url }).zoom_url, zoom_url);
+  for (const zoom_url of ["javascript:alert(1)", "http://zoom.us/j/123", "https://zoom.us.evil.test/j/123", "https://evilzoom.us/j/123", "https://user:pass@zoom.us/j/123", "https://zoom.us:444/j/123", "https://zoom.us/", "https://example.com/j/123"]) assert.throws(() => validateOnlineClass({ ...valid, zoom_url }));
+  for (const change of [{ title: " " }, { title: "x".repeat(201) }, { section: "other" }, { medium: "other" }]) assert.throws(() => validateOnlineClass({ ...valid, ...change }));
+});
+
+test("Online class mutations require same-origin admin authentication", async (t) => {
+  const originalCookies = globalThis.testCookies;
+  globalThis.testCookies = { get: () => undefined };
+  t.after(() => { globalThis.testCookies = originalCookies; });
+  for (const method of ["POST", "PATCH", "DELETE"]) {
+    const request = (origin) => new Request("http://localhost:3000/api/online-classes", { method, headers: { Origin: origin }, body: "{}" });
+    assert.equal((await onlineClasses[method](request("https://evil.test"))).status, 403);
+    assert.equal((await onlineClasses[method](request("http://localhost:3000"))).status, 401);
+  }
 });

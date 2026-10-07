@@ -6,7 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "@/components/login-form";
 import FolderEditor from "@/components/folder-editor";
+import SubscribeNotice from "@/components/subscribe-notice";
+import { ContentOrder, orderByCreated } from "@/lib/content-order";
 import Rankings from "@/components/rankings";
+import OnlineClasses from "@/components/online-classes";
 import PdfTutes from "@/components/pdf-tutes";
 import VideoEditor from "@/components/video-editor";
 import { LessonFolder, VideoModule, Medium, contentMedium, categoryLabel } from "@/lib/modules";
@@ -31,10 +34,12 @@ const categoryGroups = [
     { id: "Tutes", icon: FileText },
     { id: "O/L Past Papers", icon: FileClock },
     { id: "Ranking", icon: Award },
+    { id: "O/L Online Classes", icon: Video },
   ] },
   { label: "A/L", items: [
     { id: "AL Video Modules", icon: BookOpen },
     { id: "A/L Past Papers", icon: FileClock },
+    { id: "A/L Online Classes", icon: Video },
   ] },
   { label: "", items: [
     { id: "About Us", icon: MessageSquare },
@@ -51,6 +56,7 @@ function Brand({ compact = false }: { compact?: boolean }) {
 
 export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "admin" }) {
   const admin = mode === "admin";
+  const [contentOrder, setContentOrder] = useState<ContentOrder>("newest");
   const mobileMenu = useRef<HTMLDialogElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
@@ -131,8 +137,8 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
   const isTute = category === "#tute";
   const isCourse = !["About Us", "Contact Us"].includes(category);
   const activeFolder = folders.find((folder) => folder.id === activeFolderId) ?? null;
-  const shownFolders = folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase()));
-  const shownLessons = lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase()));
+  const shownFolders = admin ? orderByCreated(folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase())), contentOrder) : folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase()));
+  const shownLessons = admin ? orderByCreated(lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase())), contentOrder) : lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase()));
 
   async function signOut() {
     setActionBusy(true);
@@ -206,6 +212,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
 
   return (
     <div className="site">
+      {!admin && <SubscribeNotice />}
       <header className="topbar">
         <button className="menu-button mobile-menu-trigger" aria-label="Open course menu" aria-haspopup="dialog" aria-expanded={menuOpen} aria-controls="mobile-course-menu" onClick={() => setMenuOpen(true)}><Menu size={25} /></button>
         <Brand />
@@ -222,9 +229,10 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
       </dialog>
       <main className="main-content">
         {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
+        {admin && isCourse && <div className="admin-content-order"><label>Sort by added date<select aria-label="Sort content by added date" value={contentOrder} onChange={(event) => setContentOrder(event.target.value as ContentOrder)}><option value="oldest">First added first</option><option value="newest">First added last</option></select></label></div>}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
         {notice && <p className="admin-message success" role="status">{notice}</p>}
-        {category === "Ranking" ? <Rankings key={String(demo)} admin={admin} demo={demo} /> : category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} /> : isCourse ? <>
+        {category === "O/L Online Classes" || category === "A/L Online Classes" ? <OnlineClasses key={`${category}-${medium}-${demo}`} admin={admin} demo={demo} contentOrder={admin ? contentOrder : undefined} section={category === "O/L Online Classes" ? "ol" : "al"} medium={medium} /> : category === "Ranking" ? <Rankings key={String(demo)} admin={admin} demo={demo} contentOrder={admin ? contentOrder : undefined} /> : category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} contentOrder={admin ? contentOrder : undefined} /> : isCourse ? <>
           {activeFolder && <div className="folder-detail"><button className="secondary-button folder-back" onClick={() => { setActiveFolderId(null); setQuery(""); }}><ArrowLeft size={16} /> All lessons · {categoryLabel(category)}</button><p>{activeFolder.description}</p><div className="folder-stats"><span><Video size={17} /> {lessons.filter((item) => item.folder_id === activeFolder.id && contentMedium(item) === medium).length} {admin ? "videos added" : "videos available"} / {activeFolder.planned_videos} planned</span><span><Award size={17} /> {activeFolder.marks} marks available</span>{admin && <button className="secondary-button" onClick={() => setFolderEditor({ folder: activeFolder })}>Edit folder details</button>}</div></div>}
           <div className="catalog-toolbar"><span>{isTute ? "YouTube videos" : activeFolder ? "Videos in this lesson" : "Lesson folders"} · {categoryLabel(category)}</span><div className="catalog-controls">{admin && (activeFolder || isTute ? <button className="purchase-button add-video-button" onClick={() => setEditor({ lesson: null })}><Plus size={19} /> Add video</button> : <button className="purchase-button add-video-button" onClick={() => setFolderEditor({ folder: null })}><Plus size={19} /> Add lessons</button>)}<label className="lesson-search"><Search size={18} /><input aria-label="Search lessons" placeholder="Search lessons..." value={query} onChange={(event) => setQuery(event.target.value)} /></label></div></div>
           {!activeFolder && !isTute && <div className="lesson-grid folder-grid">{shownFolders.map((folder) => {

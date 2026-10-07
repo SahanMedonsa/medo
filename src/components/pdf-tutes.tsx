@@ -1,11 +1,13 @@
 "use client";
 
+import { ContentOrder, orderByCreated } from "@/lib/content-order";
+
 import { Download, FileText, Plus, X, FolderOpen, ArrowLeft, ExternalLink, Search } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { PdfTute, PdfFolder, googleDriveFileUrl, googleDrivePreviewUrl, validatePdfFolder } from "@/lib/pdfs";
 import { demoPdfs, demoPdfFolders } from "@/lib/demo-pdfs";
 
-export default function PdfTutes({ admin, demo, medium }: { admin: boolean; demo: boolean; medium: "si" | "en" }) {
+export default function PdfTutes({ admin, demo, medium, contentOrder }: { contentOrder?: ContentOrder; admin: boolean; demo: boolean; medium: "si" | "en" }) {
   const [query, setQuery] = useState("");
   const [folders, setFolders] = useState<PdfFolder[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -156,13 +158,13 @@ export default function PdfTutes({ admin, demo, medium }: { admin: boolean; demo
       {admin && !loading && (!activeId || activeFolder) && <button className="purchase-button add-video-button" onClick={() => { setError(""); setEditingFolder(null); setEditingPdf(null); setFolderOpen(!activeId); setOpen(true); }}><Plus size={18} />{activeId ? "Add tute" : "Create folder"}</button>}
       <label className="lesson-search"><Search size={18} /><input aria-label="Search tutes and folders" placeholder="Search tutes..." value={query} onChange={(event) => setQuery(event.target.value)} /></label>
     </div></div>
-    {!loading && !activeId && <div className="lesson-grid folder-grid tute-grid">{shownFolders.map((folder) => <article className="lesson-folder-card" key={folder.id}>
+    {!loading && !activeId && <div className="lesson-grid folder-grid tute-grid">{(admin && contentOrder ? orderByCreated(shownFolders, contentOrder) : shownFolders).map((folder) => <article className="lesson-folder-card" key={folder.id}>
       <span className="folder-symbol"><FolderOpen size={32} /></span><h3>{folder.name}</h3><p>Grade: {folder.grade}</p><p className="admin-caption">{pdfs.filter((pdf) => pdf.folder_id === folder.id).length} tutes</p>
       {admin && <button className="secondary-button" disabled={busy} onClick={() => { setEditingFolder(folder); setEditingPdf(null); setFolderOpen(true); setError(""); setOpen(true); }}>Edit</button>}
       <button className="purchase-button" onClick={() => { setActiveId(folder.id); setQuery(""); }}>Open folder</button>
     </article>)}{unfiled.length > 0 && <article className="lesson-folder-card"><span className="folder-symbol"><FolderOpen size={32} /></span><h3>Unfiled tutes</h3><p>Previously added PDFs</p><button className="purchase-button" onClick={() => { setActiveId("unfiled"); setQuery(""); }}>Open folder</button></article>}</div>}
     {error && !open && <div className="admin-message error" role="alert">{error} <button className="secondary-button" onClick={() => setRetry((value) => value + 1)}>Reload PDFs</button></div>}
-    {loading ? <p role="status">Loading PDFs…</p> : <div className="lesson-grid video-grid tute-grid">{shown.map((pdf) => <article className="lesson-folder-card" key={pdf.id}>
+    {loading ? <p role="status">Loading PDFs…</p> : <div className="lesson-grid video-grid tute-grid">{(admin && contentOrder ? orderByCreated(shown, contentOrder) : shown).map((pdf) => <article className="lesson-folder-card" key={pdf.id}>
       <>{pdf.drive_url ? <iframe className="pdf-preview" src={googleDrivePreviewUrl(pdf.drive_url)} title={`Preview of ${pdf.title}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen /> : <span className="folder-symbol"><FileText size={32} /></span>}</><h3>{pdf.title}</h3><p className="folder-description">{pdf.description}</p>
       <p className="admin-caption">{pdf.drive_url ? "PDF · Google Drive" : `PDF · ${(pdf.size / 1024 / 1024).toFixed(2)} MB`}</p>
       {admin && <div className="student-access"><span>{pdf.published ? "Enabled for students" : "Disabled for students"}</span><button className="access-switch" role="switch" aria-checked={pdf.published} aria-label={`Student access to ${pdf.title}`} disabled={busy} onClick={() => change(pdf)}><span /></button></div>}
