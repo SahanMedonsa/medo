@@ -100,6 +100,22 @@ service cloud.firestore {
         && request.resource.data.created_at == resource.data.created_at;
       allow delete: if admin();
     }
+    match /online_classes/{id} {
+      function validClass(data) {
+        return data.keys().hasAll(['title', 'zoom_url', 'section', 'medium', 'created_at'])
+          && data.keys().hasOnly(['title', 'zoom_url', 'section', 'medium', 'created_at'])
+          && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+          && data.zoom_url is string && data.zoom_url.size() <= 2000
+          && data.zoom_url.matches('https://([a-z0-9-]+[.])*zoom[.](us|com)/(j|my|w)/[^\\s]+')
+          && data.section in ['ol', 'al'] && data.medium in ['si', 'en']
+          && data.created_at is string;
+      }
+      allow read: if true;
+      allow create: if admin() && validClass(request.resource.data);
+      allow update: if admin() && validClass(request.resource.data)
+        && request.resource.data.created_at == resource.data.created_at;
+      allow delete: if admin();
+    }
     match /admins/{uid} {
       allow get: if request.auth != null && request.auth.uid == uid;
       allow list, write: if false;
