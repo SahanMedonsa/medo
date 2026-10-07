@@ -376,3 +376,40 @@ test("Online class mutations require same-origin admin authentication", async (t
     assert.equal((await onlineClasses[method](request("http://localhost:3000"))).status, 401);
   }
 });
+
+ test("Student display order is public to read and restricted to admin writes", async (t) => {
+  const settings = await import(await source("../src/app/api/catalog-settings/route.ts", substitutions));
+  const original = globalThis.fetch;
+  const oldDemo = process.env.LOCAL_DEMO;
+  process.env.LOCAL_DEMO = "false";
+  let authenticated = false;
+  let savedOrder;
+  globalThis.testCookies = { get: () => authenticated ? { value: "admin-token" } : undefined };
+  t.after(() => {
+    globalThis.fetch = original;
+    delete globalThis.testCookies;
+    if (oldDemo === undefined) delete process.env.LOCAL_DEMO; else process.env.LOCAL_DEMO = oldDemo;
+  });
+  globalThis.fetch = async (url, options) => {
+    if (String(url).includes("accounts:lookup")) return Response.json({ users: [{ localId: "admin" }] });
+    if (String(url).includes("/admins/admin")) return Response.json({ fields: {} });
+    assert.ok(String(url).endsWith("/catalog_settings/display"));
+    if (options.method === "PATCH") {
+      assert.equal(options.headers.get("Authorization"), "Bearer admin-token");
+      savedOrder = JSON.parse(options.body).fields.content_order.stringValue;
+    }
+    if (!savedOrder) return new Response(null, { status: 404 });
+    return Response.json({ name: "catalog_settings/display", fields: { content_order: { stringValue: savedOrder } } });
+  };
+  const request = (contentOrder, origin = "http://localhost:3000") => new Request("http://localhost:3000/api/catalog-settings", {
+    method: "PUT", headers: { Origin: origin }, body: JSON.stringify({ contentOrder }),
+  });
+  assert.equal((await (await settings.GET()).json()).contentOrder, "newest");
+  assert.equal((await settings.PUT(request("oldest"))).status, 401);
+  authenticated = true;
+  assert.equal((await settings.PUT(request("oldest", "https://other.test"))).status, 403);
+  assert.equal((await settings.PUT(request("invalid"))).status, 400);
+  assert.equal((await settings.PUT(request("oldest"))).status, 200);
+  authenticated = false;
+  assert.equal((await (await settings.GET()).json()).contentOrder, "oldest");
+});

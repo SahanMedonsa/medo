@@ -88,7 +88,7 @@ export default function OnlineClasses({ admin, demo, section, medium, contentOrd
     {notice && <p className="admin-message success" role="status">{notice}</p>}
     {error && !editor && <div className="empty-panel" role="alert"><p>{error}</p><button className="secondary-button" onClick={() => { setLoading(true); setRetry((value) => value + 1); }}>Try again</button></div>}
     {loading ? <p role="status">Loading online classes…</p> : <div className="lesson-grid online-class-grid">
-      {(admin && contentOrder ? orderByCreated(shown, contentOrder) : shown).map((item) => <article className="lesson-card online-class-card" key={item.id}>
+      {(contentOrder ? orderByCreated(shown, contentOrder) : shown).map((item) => <article className="lesson-card online-class-card" key={item.id}>
         <div className="online-class-icon"><Video size={32} aria-hidden="true" /><span>LIVE ON ZOOM</span></div>
         <h2>{item.title}</h2><p className="lesson-description">Join your teacher and classmates online.</p>
         <div className="card-actions">{admin && <><button className="secondary-button" disabled={busy} onClick={() => { setError(""); setEditor({ item }); }}>Edit</button><button className="secondary-button danger-button" disabled={busy} onClick={() => remove(item)}>Delete</button></>}

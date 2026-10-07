@@ -116,6 +116,14 @@ service cloud.firestore {
         && request.resource.data.created_at == resource.data.created_at;
       allow delete: if admin();
     }
+    match /catalog_settings/{id} {
+      allow get: if id == 'display';
+      allow create, update: if id == 'display' && admin()
+        && request.resource.data.keys().hasAll(['content_order'])
+        && request.resource.data.keys().hasOnly(['content_order'])
+        && request.resource.data.content_order in ['oldest', 'newest'];
+      allow list, delete: if false;
+    }
     match /admins/{uid} {
       allow get: if request.auth != null && request.auth.uid == uid;
       allow list, write: if false;

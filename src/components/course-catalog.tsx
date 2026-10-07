@@ -112,6 +112,49 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [reload, mode]);
+  const [orderBusy, setOrderBusy] = useState(false);
+  const [orderLoaded, setOrderLoaded] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadOrder() {
+      try {
+        const response = await fetch("/api/catalog-settings", { cache: "no-store", signal: controller.signal });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        const saved = data.demo ? localStorage.getItem("medonsa-content-order") : data.contentOrder;
+        setContentOrder(saved === "oldest" ? "oldest" : "newest");
+        setOrderLoaded(true);
+      } catch (error) {
+        if (!controller.signal.aborted) setLoadError((error as Error).message);
+      }
+    }
+    void loadOrder();
+    const refresh = () => { if (!document.hidden) void loadOrder(); };
+    window.addEventListener("focus", refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      controller.abort();
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, [reload]);
+
+  async function saveContentOrder(next: ContentOrder) {
+    setOrderBusy(true); setNotice(""); setLoadError("");
+    try {
+      if (demo) localStorage.setItem("medonsa-content-order", next);
+      else {
+        const response = await fetch("/api/catalog-settings", {
+          method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contentOrder: next }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+      }
+      setContentOrder(next);
+      setNotice("Display order saved for students.");
+    } catch (error) { setLoadError((error as Error).message); }
+    finally { setOrderBusy(false); }
+  }
   const purchase = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (selectedLesson) purchase.current?.showModal();
@@ -137,8 +180,8 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
   const isTute = category === "#tute";
   const isCourse = !["About Us", "Contact Us"].includes(category);
   const activeFolder = folders.find((folder) => folder.id === activeFolderId) ?? null;
-  const shownFolders = admin ? orderByCreated(folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase())), contentOrder) : folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase()));
-  const shownLessons = admin ? orderByCreated(lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase())), contentOrder) : lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase()));
+  const shownFolders = orderByCreated(folders.filter((folder) => folder.category === category && contentMedium(folder) === medium && (folder.title + folder.description).toLowerCase().includes(query.toLowerCase())), contentOrder);
+  const shownLessons = orderByCreated(lessons.filter((lesson) => lesson.category === category && contentMedium(lesson) === medium && (isTute || (activeFolder ? lesson.folder_id === activeFolder.id : !lesson.folder_id)) && (lesson.title + lesson.description).toLowerCase().includes(query.toLowerCase())), contentOrder);
 
   async function signOut() {
     setActionBusy(true);
@@ -229,10 +272,11 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
       </dialog>
       <main className="main-content">
         {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
-        {admin && isCourse && <div className="admin-content-order"><label>Sort by added date<select aria-label="Sort content by added date" value={contentOrder} onChange={(event) => setContentOrder(event.target.value as ContentOrder)}><option value="oldest">First added first</option><option value="newest">First added last</option></select></label></div>}
+        {admin && isCourse && <div className="admin-content-order"><label>Student display order<select aria-label="Sort content by added date" value={contentOrder} disabled={orderBusy || !orderLoaded} onChange={(event) => void saveContentOrder(event.target.value as ContentOrder)}><option value="oldest">First added first</option><option value="newest">First added last</option></select></label></div>}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
+        {loadError && !["2026 O/L Maths", "Grade 10", "#tute", "AL Video Modules", "A/L Past Papers", "O/L Past Papers"].includes(category) && <p role="alert">{loadError}</p>}
         {notice && <p className="admin-message success" role="status">{notice}</p>}
-        {category === "O/L Online Classes" || category === "A/L Online Classes" ? <OnlineClasses key={`${category}-${medium}-${demo}`} admin={admin} demo={demo} contentOrder={admin ? contentOrder : undefined} section={category === "O/L Online Classes" ? "ol" : "al"} medium={medium} /> : category === "Ranking" ? <Rankings key={String(demo)} admin={admin} demo={demo} contentOrder={admin ? contentOrder : undefined} /> : category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} contentOrder={admin ? contentOrder : undefined} /> : isCourse ? <>
+        {category === "O/L Online Classes" || category === "A/L Online Classes" ? <OnlineClasses key={`${category}-${medium}-${demo}`} admin={admin} demo={demo} contentOrder={contentOrder} section={category === "O/L Online Classes" ? "ol" : "al"} medium={medium} /> : category === "Ranking" ? <Rankings key={String(demo)} admin={admin} demo={demo} contentOrder={contentOrder} /> : category === "Tutes" ? <PdfTutes key={`${medium}-${demo}`} admin={admin} demo={demo} medium={medium} contentOrder={contentOrder} /> : isCourse ? <>
           {activeFolder && <div className="folder-detail"><button className="secondary-button folder-back" onClick={() => { setActiveFolderId(null); setQuery(""); }}><ArrowLeft size={16} /> All lessons · {categoryLabel(category)}</button><p>{activeFolder.description}</p><div className="folder-stats"><span><Video size={17} /> {lessons.filter((item) => item.folder_id === activeFolder.id && contentMedium(item) === medium).length} {admin ? "videos added" : "videos available"} / {activeFolder.planned_videos} planned</span><span><Award size={17} /> {activeFolder.marks} marks available</span>{admin && <button className="secondary-button" onClick={() => setFolderEditor({ folder: activeFolder })}>Edit folder details</button>}</div></div>}
           <div className="catalog-toolbar"><span>{isTute ? "YouTube videos" : activeFolder ? "Videos in this lesson" : "Lesson folders"} · {categoryLabel(category)}</span><div className="catalog-controls">{admin && (activeFolder || isTute ? <button className="purchase-button add-video-button" onClick={() => setEditor({ lesson: null })}><Plus size={19} /> Add video</button> : <button className="purchase-button add-video-button" onClick={() => setFolderEditor({ folder: null })}><Plus size={19} /> Add lessons</button>)}<label className="lesson-search"><Search size={18} /><input aria-label="Search lessons" placeholder="Search lessons..." value={query} onChange={(event) => setQuery(event.target.value)} /></label></div></div>
           {!activeFolder && !isTute && <div className="lesson-grid folder-grid">{shownFolders.map((folder) => {

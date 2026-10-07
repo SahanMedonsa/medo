@@ -45,7 +45,7 @@ export async function firebaseRequest(path: string, token?: string, init: Reques
     return Response.json({ id: data.users[0].localId, email: data.users[0].email });
   }
   const collection = url.pathname.split("/")[2];
-  if (!["admins", "modules", "lesson_folders", "pdfs", "pdf_folders", "ranking_papers", "ranking_entries", "online_classes"].includes(collection)) throw new Error("Unsupported collection");
+  if (!["catalog_settings", "admins", "modules", "lesson_folders", "pdfs", "pdf_folders", "ranking_papers", "ranking_entries", "online_classes"].includes(collection)) throw new Error("Unsupported collection");
   if (collection === "admins") {
     const uid = url.searchParams.get("user_id")?.replace(/^eq\./, "");
     if (!uid || init.method) return Response.json({}, { status: 400 });
@@ -55,6 +55,13 @@ export async function firebaseRequest(path: string, token?: string, init: Reques
     return Response.json([{ user_id: uid }]);
   }
   const id = url.searchParams.get("id")?.replace(/^eq\./, "");
+  if (collection === "catalog_settings" && init.method === "PUT") {
+    if (id !== "display") return Response.json({}, { status: 400 });
+    const response = await call(`${base}/${collection}/${id}`, token, {
+      method: "PATCH", body: JSON.stringify({ fields: encodeFields(body) }),
+    });
+    return response.ok ? Response.json([decodeDocument(await response.json())]) : response;
+  }
   if (init.method === "POST" || init.method === "PATCH") {
     if (init.method === "PATCH" && !id) return Response.json({}, { status: 400 });
     const documentId = id ?? crypto.randomUUID();
