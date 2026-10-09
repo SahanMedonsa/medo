@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sahan Medonsa | Online Courses",
+  title: "Sahan Medonsa",
   description: "Explore A/L and O/L courses, monthly lessons, video modules, tutes and past papers.",
 };
 

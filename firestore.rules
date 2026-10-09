@@ -70,9 +70,13 @@ service cloud.firestore {
     match /ranking_papers/{id} {
       function validPaper(data) {
         return data.keys().hasAll(['name', 'date', 'created_at'])
-          && data.keys().hasOnly(['name', 'date', 'created_at'])
+          && data.keys().hasOnly(['name', 'date', 'created_at', 'drive_url', 'answers_url'])
           && data.name is string && data.name.size() > 0 && data.name.size() <= 200
           && data.date is string && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+          && (!('drive_url' in data) || (data.drive_url is string
+            && (data.drive_url == '' || data.drive_url.matches('https://drive[.]google[.]com/file/d/[a-zA-Z0-9_-]{10,200}/view([?]resourcekey=[a-zA-Z0-9_-]{1,200})?'))))
+          && (!('answers_url' in data) || (data.answers_url is string
+            && (data.answers_url == '' || data.answers_url.matches('https://www[.]youtube[.]com/watch[?]v=[a-zA-Z0-9_-]{11}'))))
           && data.created_at is string;
       }
       allow read: if true;

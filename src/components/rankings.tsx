@@ -5,13 +5,20 @@ import { ContentOrder, orderByCreated } from "@/lib/content-order";
 import Image from "next/image";
 import kalutaraSchools from "@/lib/kalutara-schools.json";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { ArrowLeft, Award, Plus, X } from "lucide-react";
+import { ArrowLeft, Award, Download, Play, Plus, X } from "lucide-react";
 import { RankingEntry, RankingPaper, rankStudents, validateRankingEntry, validateRankingPaper } from "@/lib/rankings";
 
 type Data = { papers: RankingPaper[]; entries: RankingEntry[] };
 type Editor = { kind: "paper"; item?: RankingPaper } | { kind: "entry"; item?: RankingEntry };
 const demoKey = "medonsa-demo-rankings";
 function readDemo(): Data { return JSON.parse(localStorage.getItem(demoKey) || '{"papers":[],"entries":[]}'); }
+
+function PaperLinks({ paper }: { paper: RankingPaper }) {
+  return <>
+    {paper.drive_url && <a className="secondary-button ranking-resource-button" href={paper.drive_url} target="_blank" rel="noopener noreferrer"><Download size={17} aria-hidden="true" /> Download paper</a>}
+    {paper.answers_url && <a className="secondary-button ranking-resource-button" href={paper.answers_url} target="_blank" rel="noopener noreferrer"><Play size={17} aria-hidden="true" /> Answers</a>}
+  </>;
+}
 
 export default function Rankings({ admin, demo, contentOrder }: { contentOrder?: ContentOrder; admin: boolean; demo: boolean }) {
   const [data, setData] = useState<Data>({ papers: [], entries: [] });
@@ -61,7 +68,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
     setBusy(true); setError("");
     try {
       const value = editor.kind === "paper"
-        ? validateRankingPaper({ name: form.get("name"), date: form.get("date") })
+        ? validateRankingPaper({ name: form.get("name"), date: form.get("date"), drive_url: form.get("drive_url"), answers_url: form.get("answers_url") })
         : validateRankingEntry({ paper_id: activeId, name: form.get("name"), school: form.get("school"), medium: form.get("medium"), marks: form.get("marks") === "" ? NaN : Number(form.get("marks")) });
       let item: RankingPaper | RankingEntry;
       if (demo) {
@@ -106,7 +113,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
   }
 
   return <section className="rankings">
-    {paper && <div className="tute-folder-summary ranking-paper-header"><button className="tute-back" onClick={() => setActiveId(null)}><ArrowLeft size={18} /> Back</button><div className="ranking-paper-title"><h2>{paper.name}</h2><time dateTime={paper.date}>{paper.date}</time></div>{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item: paper })}>Edit paper</button>}<Image className="ranking-paper-logo" src="/logo.png" alt="Sahan Medonsa" width={1175} height={344} unoptimized /></div>}
+    {paper && <div className="tute-folder-summary ranking-paper-header"><button className="tute-back" onClick={() => setActiveId(null)}><ArrowLeft size={18} /> Back</button><div className="ranking-paper-title"><h2>{paper.name}</h2><time dateTime={paper.date}>{paper.date}</time></div>{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item: paper })}>Edit paper</button>}<div className="ranking-paper-resources"><PaperLinks paper={paper} /></div><Image className="ranking-paper-logo" src="/logo.png" alt="Sahan Medonsa" width={1175} height={344} unoptimized /></div>}
     <div className="catalog-toolbar"><span>{paper ? `${ranked.length} students · Highest marks first` : "Papers and results"}</span>{admin && !loading && <button className="purchase-button add-video-button" onClick={() => edit({ kind: paper ? "entry" : "paper" })}><Plus size={18} />{paper ? "Add student" : "Add paper"}</button>}</div>
     {error && !editor && <p className="admin-message error" role="alert">{error} <button className="secondary-button" onClick={() => setRetry((value) => value + 1)}>Retry</button></p>}
     {loading ? <p role="status">Loading rankings…</p> : paper ? <>
@@ -132,14 +139,14 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
             {winners.map((winner) => <div className="ranking-paper-winner" key={winner.id}><h3>{winner.name}</h3><strong>{winner.marks} <span>marks</span></strong><p>{winner.school}</p></div>)}
           </aside>}
         </div>
-        <div className="card-actions">{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
+        <div className="card-actions"><PaperLinks paper={item} />{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
       </article>;
     })}</div>{!data.papers.length && !error && <p className="admin-caption">{admin ? "Add a paper name and date to get started." : "Paper rankings will appear here when added."}</p>}</>}
     <dialog ref={dialog} className="video-editor-dialog" aria-labelledby="ranking-editor-title" onCancel={(event) => { if (busy) event.preventDefault(); else setEditor(null); }}>
       {editor && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-editor-title">{editor.item ? "Edit" : "Add"} {editor.kind === "paper" ? "paper" : "student result"}</h2><button className="close-button" aria-label="Close editor" disabled={busy} onClick={() => setEditor(null)}><X size={22} /></button></div>
         <form className="module-form" key={`${editor.kind}-${editor.item?.id ?? "new"}`} onSubmit={save}><fieldset disabled={busy}>
           <label>{editor.kind === "paper" ? "Paper name" : "Student name"}<input name="name" required maxLength={200} defaultValue={editor.item?.name} /></label>
-          {editor.kind === "paper" ? <label>Paper date<input name="date" type="date" required defaultValue={editor.item?.date} /></label> : <><label>Marks<input name="marks" type="number" min="0" max="10000" step="any" required defaultValue={editor.item?.marks} /></label><label>Medium<select name="medium" defaultValue={editor.item?.medium ?? "si"}><option value="si">Sinhala</option><option value="en">English</option></select></label><label>School<input name="school" list="kalutara-schools" autoComplete="off" placeholder="Search or type a school name" required maxLength={200} defaultValue={editor.item?.school} /><datalist id="kalutara-schools">{schoolNames.map((name) => <option key={name} value={name} />)}</datalist></label><p className="admin-caption">Search Kalutara government schools or type another school name.</p></>}
+          {editor.kind === "paper" ? <><label>Paper date<input name="date" type="date" required defaultValue={editor.item?.date} /></label><label>Google Drive paper link<input name="drive_url" type="url" maxLength={2000} placeholder="https://drive.google.com/file/d/…/view" defaultValue={editor.item?.drive_url ?? ""} /></label><p className="admin-caption">Optional. Set the file’s Google Drive access to “Anyone with the link” so students can open and download it.</p><label>YouTube answers link<input name="answers_url" type="url" maxLength={2000} placeholder="https://www.youtube.com/watch?v=…" defaultValue={editor.item?.answers_url ?? ""} /></label><p className="admin-caption">Optional. Use a public or unlisted video. Clear either link to remove its student button.</p></> : <><label>Marks<input name="marks" type="number" min="0" max="10000" step="any" required defaultValue={editor.item?.marks} /></label><label>Medium<select name="medium" defaultValue={editor.item?.medium ?? "si"}><option value="si">Sinhala</option><option value="en">English</option></select></label><label>School<input name="school" list="kalutara-schools" autoComplete="off" placeholder="Search or type a school name" required maxLength={200} defaultValue={editor.item?.school} /><datalist id="kalutara-schools">{schoolNames.map((name) => <option key={name} value={name} />)}</datalist></label><p className="admin-caption">Search Kalutara government schools or type another school name.</p></>}
           {error && <p className="admin-message error" role="alert">{error}</p>}<button className="purchase-button" type="submit">{busy ? "Saving…" : "Save"}</button>
         </fieldset></form>
       </section>}

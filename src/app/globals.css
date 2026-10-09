@@ -352,6 +352,8 @@ button:disabled { opacity: .55; cursor: wait; }
 .ranking-actions { display: flex; gap: 8px; align-items: center; }
 
 .ranking-paper-header { gap: 16px; }
+.ranking-paper-resources { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ranking-resource-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
 .ranking-paper-title { display: grid; gap: 5px; min-width: 0; }
 .ranking-paper-title time { font-size: 14px; color: #68707b; }
 .ranking-paper-logo { margin-left: auto; width: 190px; height: auto; object-fit: contain; }

@@ -11,6 +11,8 @@ async function source(path, replacements = {}) {
 const configUrl = await source("../src/lib/firebase-config.ts");
 const restUrl = await source("../src/lib/firebase-rest.ts", { '"./firebase-config"': JSON.stringify(configUrl) });
 const modulesUrl = await source("../src/lib/modules.ts");
+const rankingPdfsUrl = await source("../src/lib/pdfs.ts");
+const rankingSubstitutions = { '"./pdfs"': JSON.stringify(rankingPdfsUrl), '"./modules"': JSON.stringify(modulesUrl) };
 const onlineClassesUrl = await source("../src/lib/online-classes.ts");
 const { validateOnlineClass } = await import(onlineClassesUrl);
 const cookieUrl = "data:text/javascript," + encodeURIComponent("export async function cookies() { return globalThis.testCookies; }");
@@ -303,8 +305,8 @@ test("Folder API requires admin, saves metadata, and rejects missing parent fold
 });
 
 test("Rankings validate paper dates and student results and give tied marks equal ranks", async () => {
-  const { validateRankingPaper, validateRankingEntry, rankStudents } = await import(await source("../src/lib/rankings.ts"));
-  assert.deepEqual(validateRankingPaper({ name: " Paper 1 ", date: "2026-10-01" }), { name: "Paper 1", date: "2026-10-01" });
+  const { validateRankingPaper, validateRankingEntry, rankStudents } = await import(await source("../src/lib/rankings.ts", rankingSubstitutions));
+  assert.deepEqual(validateRankingPaper({ name: " Paper 1 ", date: "2026-10-01" }), { name: "Paper 1", date: "2026-10-01", drive_url: "", answers_url: "" });
   for (const date of ["2026-02-30", "bad", "2026-13-01"]) assert.throws(() => validateRankingPaper({ name: "Paper", date }));
   const validEntry = { paper_id: uuid, name: "Student", school: "School", marks: 89.5 };
   assert.equal(validateRankingEntry(validEntry).marks, 89.5);
@@ -322,7 +324,7 @@ test("Ranking API protects writes, validates parent papers, and supports editing
   const original = globalThis.fetch;
   globalThis.testCookies = { get: () => undefined };
   t.after(() => { globalThis.fetch = original; delete globalThis.testCookies; });
-  const rankingsUrl = await source("../src/lib/rankings.ts");
+  const rankingsUrl = await source("../src/lib/rankings.ts", rankingSubstitutions);
   const route = await import(await source("../src/app/api/rankings/route.ts", { ...substitutions, '"@/lib/rankings"': JSON.stringify(rankingsUrl) }));
   const request = (body, origin = "http://localhost:3000") => new Request("http://localhost:3000/api/rankings", { method: "POST", headers: { Origin: origin }, body: JSON.stringify(body) });
   assert.equal((await route.POST(request({}))).status, 401);
@@ -341,6 +343,20 @@ test("Ranking API protects writes, validates parent papers, and supports editing
   };
   assert.deepEqual(await (await route.GET()).json(), { papers: [], entries: [] });
   assert.equal((await route.POST(request({ kind: "paper", name: "Paper", date: "2026-10-01" }))).status, 200);
+  const paperLinks = { kind: "paper", name: "Paper", date: "2026-10-01", drive_url: "https://drive.google.com/open?id=abcdefghijklmnop&resourcekey=abc", answers_url: "https://youtu.be/dQw4w9WgXcQ" };
+  const linked = await route.POST(request(paperLinks));
+  assert.equal(linked.status, 200);
+  const saved = (await linked.json()).item;
+  assert.equal(saved.drive_url, "https://drive.google.com/file/d/abcdefghijklmnop/view?resourcekey=abc");
+  assert.equal(saved.answers_url, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+  const cleared = await route.PATCH(request({ ...paperLinks, id: uuid, drive_url: "", answers_url: "" }));
+  assert.equal(cleared.status, 200);
+  const removed = (await cleared.json()).item;
+  assert.equal(removed.drive_url, "");
+  assert.equal(removed.answers_url, "");
+  for (const change of [{ drive_url: "https://example.com/paper.pdf" }, { answers_url: "javascript:alert(1)" }]) {
+    assert.equal((await route.POST(request({ ...paperLinks, ...change }))).status, 400);
+  }
   const entry = { kind: "entry", paper_id: uuid, name: "Student", school: "School", marks: 89.5 };
   assert.equal((await route.POST(request(entry))).status, 200);
   const edited = await route.PATCH(request({ ...entry, id: uuid, marks: 95 }));
@@ -354,7 +370,7 @@ test("Ranking API protects writes, validates parent papers, and supports editing
   assert.equal((await route.DELETE(request({ id: uuid }, "https://other.example"))).status, 403);
   assert.equal((await route.DELETE(request({ id: uuid }))).status, 200);
   assert.equal(deletes, 1);
-  assert.equal(writes, 3);
+  assert.equal(writes, 5);
 });
 
 
@@ -412,4 +428,17 @@ test("Online class mutations require same-origin admin authentication", async (t
   assert.equal((await settings.PUT(request("oldest"))).status, 200);
   authenticated = false;
   assert.equal((await (await settings.GET()).json()).contentOrder, "oldest");
+});
+
+
+test("Ranking paper links reject unsafe hosts and normalize optional links", async () => {
+  const { validateRankingPaper } = await import(await source("../src/lib/rankings.ts", rankingSubstitutions));
+  const paper = { name: "Paper", date: "2026-10-09" };
+  for (const drive_url of ["javascript:alert(1)", "https://drive.google.com.evil.test/file/d/abcdefghijklmnop/view", "https://drive.google.com/drive/folders/abcdefghijklmnop", 123]) {
+    assert.throws(() => validateRankingPaper({ ...paper, drive_url }));
+  }
+  for (const answers_url of ["https://youtube.com.evil.test/watch?v=dQw4w9WgXcQ", "https://youtu.be/invalid", 123]) {
+    assert.throws(() => validateRankingPaper({ ...paper, answers_url }));
+  }
+  assert.equal(validateRankingPaper({ ...paper, answers_url: " https://youtu.be/dQw4w9WgXcQ " }).answers_url, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 });
