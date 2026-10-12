@@ -139,7 +139,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
             {winners.map((winner) => <div className="ranking-paper-winner" key={winner.id}><h3>{winner.name}</h3><strong>{winner.marks} <span>marks</span></strong><p>{winner.school}</p></div>)}
           </aside>}
         </div>
-        <div className="card-actions"><PaperLinks paper={item} />{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
+        <div className="card-actions">{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
       </article>;
     })}</div>{!data.papers.length && !error && <p className="admin-caption">{admin ? "Add a paper name and date to get started." : "Paper rankings will appear here when added."}</p>}</>}
     <dialog ref={dialog} className="video-editor-dialog" aria-labelledby="ranking-editor-title" onCancel={(event) => { if (busy) event.preventDefault(); else setEditor(null); }}>
