@@ -10,8 +10,8 @@ async function source(path, replacements = {}) {
 }
 const configUrl = await source("../src/lib/firebase-config.ts");
 const restUrl = await source("../src/lib/firebase-rest.ts", { '"./firebase-config"': JSON.stringify(configUrl) });
-const modulesUrl = await source("../src/lib/modules.ts");
 const rankingPdfsUrl = await source("../src/lib/pdfs.ts");
+const modulesUrl = await source("../src/lib/modules.ts", { '"./pdfs"': JSON.stringify(rankingPdfsUrl) });
 const rankingSubstitutions = { '"./pdfs"': JSON.stringify(rankingPdfsUrl), '"./modules"': JSON.stringify(modulesUrl) };
 const onlineClassesUrl = await source("../src/lib/online-classes.ts");
 const { validateOnlineClass } = await import(onlineClassesUrl);
@@ -441,4 +441,98 @@ test("Ranking paper links reject unsafe hosts and normalize optional links", asy
     assert.throws(() => validateRankingPaper({ ...paper, answers_url }));
   }
   assert.equal(validateRankingPaper({ ...paper, answers_url: " https://youtu.be/dQw4w9WgXcQ " }).answers_url, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+});
+
+
+test("#tute videos accept optional Drive files and reject unsafe or misplaced links", () => {
+  const video = { ...valid, category: "#tute" };
+  assert.equal(validateModule(video).tute_url, "");
+  assert.equal(validateModule({ ...video, tute_url: " " }).tute_url, "");
+  const link = "https://drive.google.com/file/d/abcdefghijklmnop/view?resourcekey=abc";
+  assert.equal(validateModule({ ...video, tute_url: "https://drive.google.com/open?id=abcdefghijklmnop&resourcekey=abc" }).tute_url, link);
+  for (const tute_url of [123, "javascript:alert(1)", "https://drive.google.com.evil.test/file/d/abcdefghijklmnop/view", "https://drive.google.com/drive/folders/abcdefghijklmnop"]) {
+    assert.throws(() => validateModule({ ...video, tute_url }));
+  }
+  assert.throws(() => validateModule({ ...valid, tute_url: link }));
+});
+
+test("Tute folder deletion requires admin and refuses folders containing drafts or published tutes", async (t) => {
+  const original = globalThis.fetch;
+  let authenticated = false, populated = true, deletes = 0;
+  globalThis.testCookies = { get: () => authenticated ? { value: "token" } : undefined };
+  t.after(() => { globalThis.fetch = original; delete globalThis.testCookies; });
+  const pdfUrl = await source("../src/lib/pdfs.ts");
+  const routes = await import(await source("../src/app/api/pdf-folders/route.ts", { ...substitutions, '"@/lib/pdfs"': JSON.stringify(pdfUrl) }));
+  const request = (id, origin = "http://localhost:3000") => new Request("http://localhost:3000/api/pdf-folders", { method: "DELETE", headers: { Origin: origin }, body: JSON.stringify({ id }) });
+  globalThis.fetch = async (url, options) => {
+    const address = String(url);
+    if (address.includes("accounts:lookup")) return Response.json({ users: [{ localId: "admin" }] });
+    if (address.includes("/admins/")) return Response.json({ name: "admins/admin", fields: {} });
+    if (address.includes(":runQuery")) {
+      assert.equal(JSON.parse(options.body).structuredQuery.where, undefined);
+      return Response.json(populated ? [{ document: { name: "pdfs/test", fields: encodeFields({ folder_id: uuid, published: false }) } }] : []);
+    }
+    assert.equal(options.method, "DELETE");
+    assert.ok(address.endsWith("/pdf_folders/" + uuid));
+    deletes++;
+    return new Response(null, { status: 204 });
+  };
+  assert.equal((await routes.DELETE(request(uuid))).status, 401);
+  authenticated = true;
+  assert.equal((await routes.DELETE(request(uuid, "https://other.test"))).status, 403);
+  assert.equal((await routes.DELETE(request("bad"))).status, 400);
+  assert.equal((await routes.DELETE(request(uuid))).status, 409);
+  assert.equal(deletes, 0);
+  populated = false;
+  assert.equal((await routes.DELETE(request(uuid))).status, 200);
+  assert.equal(deletes, 1);
+});
+
+test("#tute folders need only a title, medium and student visibility", () => {
+  const folder = validateFolder({ title: "Tute collection", category: "#tute", published: false });
+  assert.equal(folder.description, "");
+  assert.equal(folder.published, false);
+  assert.throws(() => validateFolder({ title: "Tutes", category: "#tute", published: "false" }));
+});
+
+test("Student catalog excludes hidden #tute folders and their videos", async (t) => {
+  const original = globalThis.fetch;
+  const oldDemo = process.env.LOCAL_DEMO;
+  process.env.LOCAL_DEMO = "false";
+  t.after(() => { globalThis.fetch = original; if (oldDemo === undefined) delete process.env.LOCAL_DEMO; else process.env.LOCAL_DEMO = oldDemo; });
+  globalThis.fetch = async (_url, options) => {
+    const collection = JSON.parse(options.body).structuredQuery.from[0].collectionId;
+    const items = collection === "lesson_folders"
+      ? [{ id: "hidden", category: "#tute", published: false }, { id: "legacy", category: "#tute" }]
+      : [{ id: "a", folder_id: "hidden", published: true }, { id: "b", folder_id: "legacy", published: true }, { id: "c", published: true }];
+    return Response.json(items.map(({ id, ...data }) => ({ document: { name: collection + "/" + id, fields: encodeFields(data) } })));
+  };
+  const result = await (await catalog.GET()).json();
+  assert.deepEqual(result.folders.map((item) => item.id), ["legacy"]);
+  assert.deepEqual(result.modules.map((item) => item.id), ["b", "c"]);
+});
+
+test("Folder list and individual folder display orders save independently", async (t) => {
+  const settings = await import(await source("../src/app/api/catalog-settings/route.ts", substitutions));
+  const original = globalThis.fetch;
+  const oldDemo = process.env.LOCAL_DEMO;
+  process.env.LOCAL_DEMO = "false";
+  const values = new Map([["display", "newest"]]);
+  globalThis.testCookies = { get: () => ({ value: "token" }) };
+  t.after(() => { globalThis.fetch = original; delete globalThis.testCookies; if (oldDemo === undefined) delete process.env.LOCAL_DEMO; else process.env.LOCAL_DEMO = oldDemo; });
+  globalThis.fetch = async (url, options) => {
+    if (String(url).includes("accounts:lookup")) return Response.json({ users: [{ localId: "admin" }] });
+    if (String(url).includes("/admins/")) return Response.json({ fields: {} });
+    const id = new URL(url).pathname.split("/").at(-1);
+    if (options.method === "PATCH") values.set(id, JSON.parse(options.body).fields.content_order.stringValue);
+    return values.has(id) ? Response.json({ name: "catalog_settings/" + id, fields: encodeFields({ content_order: values.get(id) }) }) : new Response(null, { status: 404 });
+  };
+  const save = (scope, contentOrder) => settings.PUT(new Request("http://localhost:3000/api/catalog-settings", { method: "PUT", headers: { Origin: "http://localhost:3000" }, body: JSON.stringify({ scope, contentOrder }) }));
+  const read = async (scope) => (await (await settings.GET(new Request("http://localhost:3000/api/catalog-settings?scope=" + scope))).json()).contentOrder;
+  assert.equal((await save("display_catalog_si__tute_folders", "oldest")).status, 200);
+  assert.equal((await save("display_catalog_si__tute_" + uuid, "newest")).status, 200);
+  assert.equal(await read("display_catalog_si__tute_folders"), "oldest");
+  assert.equal(await read("display_catalog_si__tute_" + uuid), "newest");
+  assert.equal(await read("display_pdf_si_folders"), "newest");
+  assert.equal((await save("../bad", "oldest")).status, 400);
 });

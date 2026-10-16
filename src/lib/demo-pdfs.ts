@@ -25,12 +25,13 @@ export async function demoPdfs(action: "list" | "save" | "get" | "delete", value
   });
 }
 
-export async function demoPdfFolders(value?: PdfFolder): Promise<PdfFolder[]> {
+export async function demoPdfFolders(value?: PdfFolder | string): Promise<PdfFolder[]> {
   const db = await database();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("folders", value ? "readwrite" : "readonly");
     const store = transaction.objectStore("folders");
-    if (value) store.put(value);
+    if (typeof value === "string") store.delete(value);
+    else if (value) store.put(value);
     const request = store.getAll();
     transaction.oncomplete = () => { db.close(); resolve(request.result); };
     transaction.onerror = transaction.onabort = () => { db.close(); reject(new Error("Could not save or load folders in this browser.")); };

@@ -72,10 +72,11 @@ export async function POST(request: Request) {
         if (!existing.ok) throw new ApiError("Could not verify the folder.", 503);
         const folders = await existing.json();
         if (!folders.length) throw new ApiError("Folder not found.", 404);
+        if (folders[0].category !== folder.category) throw new ApiError("A folder’s category cannot change.");
         if (contentMedium(folders[0]) !== folder.medium) throw new ApiError("A folder’s medium cannot change. Create a separate folder for the other medium.");
       }
       // Category is fixed after creation so existing videos cannot become detached.
-      const payload = body.id ? { medium: folder.medium, title: folder.title, description: folder.description, planned_videos: folder.planned_videos, marks: folder.marks } : folder;
+      const payload = body.id ? { medium: folder.medium, title: folder.title, description: folder.description, planned_videos: folder.planned_videos, marks: folder.marks, ...(folder.category === "#tute" ? { published: folder.published } : {}) } : folder;
       const response = await backend(`/data/lesson_folders${body.id ? `?id=eq.${body.id}` : ""}`, token, {
         method: body.id ? "PATCH" : "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify(payload),
       });

@@ -15,6 +15,7 @@ export default function VideoEditor({ lesson, category, medium, folder, folders,
   const [form, setForm] = useState({
     medium: lesson ? contentMedium(lesson) : folder ? contentMedium(folder) : medium,
     folder_id: lesson?.folder_id ?? folder?.id ?? null,
+    tute_url: lesson?.tute_url ?? "",
     url: lesson ? `https://www.youtube.com/watch?v=${lesson.video_id}` : "",
     title: lesson?.title ?? "", description: lesson?.description ?? "", category: lesson?.category ?? category, published: lesson?.published ?? false,
   });
@@ -62,8 +63,9 @@ export default function VideoEditor({ lesson, category, medium, folder, folders,
         <label>Teaching medium<select value={form.medium} onChange={(event) => setForm({ ...form, medium: event.target.value as Medium, folder_id: null })}><option value="si">සිංහල · Sinhala medium</option><option value="en">English medium</option></select></label>
         <p className="admin-caption">Use a video, title, and description in the selected medium. Only folders in that medium are shown.</p>
         <label>Video title<input value={form.title} required maxLength={200} onChange={(event) => setForm({ ...form, title: event.target.value })} /></label>
-        <label>Category<select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value, folder_id: null })}>{moduleCategories.map((item) => <option key={item} value={item}>{categoryLabel(item)}</option>)}</select></label>
-        {form.category !== "#tute" && <label>Lesson folder<select value={form.folder_id ?? ""} onChange={(event) => setForm({ ...form, folder_id: event.target.value || null })}><option value="">Unfiled videos</option>{folders.filter((item) => item.category === form.category && contentMedium(item) === form.medium).map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>}
+        <label>Category<select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value, folder_id: null, tute_url: event.target.value === "#tute" ? form.tute_url : "" })}>{moduleCategories.map((item) => <option key={item} value={item}>{categoryLabel(item)}</option>)}</select></label>
+        <label>Lesson folder<select value={form.folder_id ?? ""} onChange={(event) => setForm({ ...form, folder_id: event.target.value || null })}><option value="">Unfiled videos</option>{folders.filter((item) => item.category === form.category && contentMedium(item) === form.medium).map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
+        {form.category === "#tute" && <><label>Google Drive tute link<input type="url" maxLength={2000} value={form.tute_url} placeholder="https://drive.google.com/file/d/…/view" onChange={(event) => setForm({ ...form, tute_url: event.target.value })} /></label><p className="admin-caption">Optional. Set Drive sharing to “Anyone with the link”. Students will see a Tute button. Clear the link to remove it.</p></>}
         <label>Description<textarea rows={3} value={form.description} maxLength={5000} onChange={(event) => setForm({ ...form, description: event.target.value })} placeholder="Add lesson details in Sinhala or English" /></label>
         <label className="checkbox-label"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} /> Publish for students</label>
         <p className="admin-caption">Drafts are visible only to admins. Published videos appear in the lesson library.</p>

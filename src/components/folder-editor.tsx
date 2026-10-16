@@ -25,7 +25,7 @@ export default function FolderEditor({ folder, category, medium, demo = false, o
     const data = new FormData(event.currentTarget);
     setBusy(true); setError("");
     try {
-      const result = await adminRequest({ action: "save_folder", medium: folder ? contentMedium(folder) : data.get("medium"), id: folder?.id, title: data.get("title"), description: data.get("description"), category: folder?.category ?? category, planned_videos: Number(data.get("planned_videos")), marks: Number(data.get("marks")) }, demo);
+      const result = await adminRequest({ action: "save_folder", medium: folder ? contentMedium(folder) : data.get("medium"), id: folder?.id, title: data.get("title"), description: data.get("description"), category: folder?.category ?? category, planned_videos: Number(data.get("planned_videos")), marks: Number(data.get("marks")), published: data.get("published") === "true" }, demo);
       onSaved(result.folder);
     } catch (error) { setError((error as Error).message); setBusy(false); }
   }
@@ -38,12 +38,13 @@ export default function FolderEditor({ folder, category, medium, demo = false, o
         <label>Teaching medium<select name="medium" defaultValue={folder ? contentMedium(folder) : medium} disabled={!!folder}><option value="si">සිංහල · Sinhala medium</option><option value="en">English medium</option></select></label>
         <p className="admin-caption">Write the title and description in this medium. A folder’s medium is fixed after creation; create a separate folder for the other medium.</p>
         <label>Folder title<input name="title" autoFocus required maxLength={200} defaultValue={folder?.title} placeholder="e.g. Algebra — Equations" /></label>
-        <label>Description<textarea name="description" required maxLength={5000} rows={4} defaultValue={folder?.description} placeholder="Explain what students will learn in this lesson." /></label>
+        {category !== "#tute" && <><label>Description<textarea name="description" required maxLength={5000} rows={4} defaultValue={folder?.description} placeholder="Explain what students will learn in this lesson." /></label>
         <div className="folder-form-numbers">
           <label>Planned number of videos<input name="planned_videos" type="number" min={1} max={10000} step={1} required defaultValue={folder?.planned_videos} placeholder="e.g. 8" /></label>
           <label>Marks available<input name="marks" type="number" min={0} max={1000} step={1} required defaultValue={folder?.marks} placeholder="e.g. 20" /></label>
         </div>
-        <p className="admin-caption">The folder will show your planned video count, how many videos have been added, and the marks available.</p>
+        <p className="admin-caption">The folder will show your planned video count, how many videos have been added, and the marks available.</p></>}
+        {category === "#tute" && <label className="checkbox-label"><input name="published" type="checkbox" value="true" defaultChecked={folder?.published !== false} /> Show folder to students</label>}
         {error && <p className="admin-message error" role="alert">{error}</p>}
         <div className="admin-actions"><button className="purchase-button">{busy ? "Saving…" : folder ? "Save changes" : "Create folder"}</button><button type="button" className="secondary-button" onClick={onClose}>Cancel</button></div>
       </fieldset></form>

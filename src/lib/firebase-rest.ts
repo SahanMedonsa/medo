@@ -56,7 +56,7 @@ export async function firebaseRequest(path: string, token?: string, init: Reques
   }
   const id = url.searchParams.get("id")?.replace(/^eq\./, "");
   if (collection === "catalog_settings" && init.method === "PUT") {
-    if (id !== "display") return Response.json({}, { status: 400 });
+    if (!id || !/^display(?:_[a-zA-Z0-9_-]{1,180})?$/.test(id)) return Response.json({}, { status: 400 });
     const response = await call(`${base}/${collection}/${id}`, token, {
       method: "PATCH", body: JSON.stringify({ fields: encodeFields(body) }),
     });

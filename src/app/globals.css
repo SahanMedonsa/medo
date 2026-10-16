@@ -474,3 +474,7 @@ button:disabled { opacity: .55; cursor: wait; }
 .admin-content-order { display: flex; justify-content: flex-end; margin: 16px 0; }
 .admin-content-order label { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #68707b; }
 .admin-content-order select { padding: 10px 12px; border: 1px solid #d3d4d8; border-radius: 10px; background: white; color: #374151; font: inherit; }
+
+.tute-resource-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
+
+.display-order-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: 12px 24px; }
