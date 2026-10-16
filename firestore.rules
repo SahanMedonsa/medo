@@ -15,15 +15,19 @@ service cloud.firestore {
     }
     function validFolder(data) {
       return data.keys().hasAll(['title', 'description', 'category', 'planned_videos', 'marks', 'created_at'])
-        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'planned_videos', 'marks', 'created_at'])
-        && textValid(data) && data.description.size() > 0
+        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'planned_videos', 'marks', 'created_at', 'published'])
+        && textValid(data) && (data.category == '#tute' || data.description.size() > 0)
+        && (!('published' in data) || data.published is bool)
         && data.planned_videos is int && data.planned_videos >= 1 && data.planned_videos <= 10000
         && data.marks is int && data.marks >= 0 && data.marks <= 1000;
     }
     function validVideo(data) {
       return data.keys().hasAll(['title', 'description', 'category', 'video_id', 'published', 'folder_id', 'created_at'])
-        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'video_id', 'published', 'folder_id', 'created_at'])
+        && data.keys().hasOnly(['medium', 'title', 'description', 'category', 'video_id', 'published', 'folder_id', 'created_at', 'tute_url'])
         && textValid(data) && data.published is bool
+        && (!('tute_url' in data) || (data.tute_url is string
+          && (data.tute_url == '' || (data.category == '#tute'
+            && data.tute_url.matches('https://drive[.]google[.]com/file/d/[a-zA-Z0-9_-]{10,200}/view([?]resourcekey=[a-zA-Z0-9_-]{1,200})?')))))
         && data.video_id is string && data.video_id.matches('^[a-zA-Z0-9_-]{11}$')
         && (data.folder_id == null || (data.folder_id is string
           && data.folder_id.matches('^[0-9a-fA-F-]{36}$')
@@ -43,7 +47,7 @@ service cloud.firestore {
       allow update: if admin() && validPdfFolder(request.resource.data)
         && request.resource.data.medium == resource.data.medium
         && request.resource.data.created_at == resource.data.created_at;
-      allow delete: if false;
+      allow delete: if admin();
     }
     match /pdfs/{id} {
       function validPdf(data) {
@@ -121,8 +125,8 @@ service cloud.firestore {
       allow delete: if admin();
     }
     match /catalog_settings/{id} {
-      allow get: if id == 'display';
-      allow create, update: if id == 'display' && admin()
+      allow get: if id.matches('display(_[a-zA-Z0-9_-]{1,180})?');
+      allow create, update: if id.matches('display(_[a-zA-Z0-9_-]{1,180})?') && admin()
         && request.resource.data.keys().hasAll(['content_order'])
         && request.resource.data.keys().hasOnly(['content_order'])
         && request.resource.data.content_order in ['oldest', 'newest'];
