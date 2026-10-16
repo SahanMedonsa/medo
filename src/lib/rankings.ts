@@ -36,6 +36,14 @@ export function validateRankingEntry(data: Record<string, unknown>) {
   if (medium !== "si" && medium !== "en") throw new Error("Choose Sinhala or English medium.");
   return { paper_id: data.paper_id, name, school, marks: data.marks, medium };
 }
+export function gradeForMarks(marks: number): "A" | "B" | "C" | "S" | "W" {
+  if (marks >= 75) return "A";
+  if (marks >= 65) return "B";
+  if (marks >= 55) return "C";
+  if (marks >= 35) return "S";
+  return "W";
+}
+
 export function rankStudents(entries: RankingEntry[]) {
   const sorted = [...entries].sort((a, b) => b.marks - a.marks || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
   let rank = 0;

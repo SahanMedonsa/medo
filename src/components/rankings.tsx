@@ -6,12 +6,19 @@ import Image from "next/image";
 import kalutaraSchools from "@/lib/kalutara-schools.json";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowLeft, Award, Download, Play, Plus, X } from "lucide-react";
-import { RankingEntry, RankingPaper, rankStudents, validateRankingEntry, validateRankingPaper } from "@/lib/rankings";
+import { RankingEntry, RankingPaper, gradeForMarks, rankStudents, validateRankingEntry, validateRankingPaper } from "@/lib/rankings";
 
 type Data = { papers: RankingPaper[]; entries: RankingEntry[] };
 type Editor = { kind: "paper"; item?: RankingPaper } | { kind: "entry"; item?: RankingEntry };
 const demoKey = "medonsa-demo-rankings";
 function readDemo(): Data { return JSON.parse(localStorage.getItem(demoKey) || '{"papers":[],"entries":[]}'); }
+
+function MarksInput({ initialMarks }: { initialMarks?: number }) {
+  const [value, setValue] = useState(initialMarks === undefined ? "" : String(initialMarks));
+  const marks = Number(value);
+  const valid = value.trim() !== "" && Number.isFinite(marks) && marks >= 0 && marks <= 10000;
+  return <><label>Marks<input name="marks" type="number" min="0" max="10000" step="any" required value={value} onChange={(event) => setValue(event.target.value)} /></label><p className="admin-caption" aria-live="polite">Grade: <strong>{valid ? gradeForMarks(marks) : "—"}</strong></p></>;
+}
 
 function PaperLinks({ paper }: { paper: RankingPaper }) {
   return <>
@@ -122,11 +129,11 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
           <div className="ranking-card-badge"><Award size={22} aria-hidden="true" /><span>Rank {entry.rank}</span></div>
           <h3>{entry.name}</h3><p className="ranking-card-school">{entry.school}</p>
           <span className="ranking-card-medium">{entry.medium === "en" ? "English" : "Sinhala"} medium</span>
-          <div className="ranking-card-score"><strong>{entry.marks}</strong><span>marks</span></div>
+          <div className="ranking-card-score"><strong>{entry.marks}</strong><span>marks · Grade {gradeForMarks(entry.marks)}</span></div>
           {admin && <div className="ranking-actions"><button className="secondary-button" disabled={busy} onClick={() => edit({ kind: "entry", item: entry })}>Edit</button><button className="secondary-button danger-button" disabled={busy} onClick={() => remove(entry)}>Delete</button></div>}
         </article>)}
       </div>}
-      {ranked.length > 5 && <div className="ranking-table-scroll"><table className="ranking-table"><caption>Other students · {paper.name} · {paper.date}</caption><thead><tr><th scope="col">Rank</th><th scope="col">Student name</th><th scope="col">School</th><th scope="col">Medium</th><th scope="col">Marks</th>{admin && <th scope="col">Actions</th>}</tr></thead><tbody>{ranked.slice(5).map((entry) => <tr key={entry.id}><td data-label="Rank">{entry.rank}</td><th scope="row">{entry.name}</th><td data-label="School">{entry.school}</td><td data-label="Medium">{entry.medium === "en" ? "English" : "Sinhala"}</td><td data-label="Marks">{entry.marks}</td>{admin && <td><div className="ranking-actions"><button className="secondary-button" disabled={busy} onClick={() => edit({ kind: "entry", item: entry })}>Edit</button><button className="secondary-button danger-button" disabled={busy} onClick={() => remove(entry)}>Delete</button></div></td>}</tr>)}</tbody></table></div>}
+      {ranked.length > 5 && <div className="ranking-table-scroll"><table className="ranking-table"><caption>Other students · {paper.name} · {paper.date}</caption><thead><tr><th scope="col">Rank</th><th scope="col">Student name</th><th scope="col">School</th><th scope="col">Medium</th><th scope="col">Marks</th><th scope="col">Grade</th>{admin && <th scope="col">Actions</th>}</tr></thead><tbody>{ranked.slice(5).map((entry) => <tr key={entry.id}><td data-label="Rank">{entry.rank}</td><th scope="row">{entry.name}</th><td data-label="School">{entry.school}</td><td data-label="Medium">{entry.medium === "en" ? "English" : "Sinhala"}</td><td data-label="Marks">{entry.marks}</td><td data-label="Grade">{gradeForMarks(entry.marks)}</td>{admin && <td><div className="ranking-actions"><button className="secondary-button" disabled={busy} onClick={() => edit({ kind: "entry", item: entry })}>Edit</button><button className="secondary-button danger-button" disabled={busy} onClick={() => remove(entry)}>Delete</button></div></td>}</tr>)}</tbody></table></div>}
       {!ranked.length && <p className="admin-caption">{admin ? "Add the first student’s name, marks, and school." : "Results will appear here when added."}</p>}
     </> : <><div className="lesson-grid folder-grid">{(contentOrder ? orderByCreated(data.papers, contentOrder) : [...data.papers].sort((a, b) => b.date.localeCompare(a.date))).map((item) => {
       const students = rankStudents(data.entries.filter((entry) => entry.paper_id === item.id));
@@ -136,7 +143,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
           <div className="ranking-paper-card-details"><span className="folder-symbol"><Award size={28} /></span><h2>{item.name}</h2><time dateTime={item.date}>{item.date}</time><p className="admin-caption">{students.length} students</p></div>
           {winners.length > 0 && <aside className="ranking-paper-winners" aria-label="First-ranked students">
             <span className="ranking-paper-winner-label"><Award size={16} aria-hidden="true" /> Rank 1</span>
-            {winners.map((winner) => <div className="ranking-paper-winner" key={winner.id}><h3>{winner.name}</h3><strong>{winner.marks} <span>marks</span></strong><p>{winner.school}</p></div>)}
+            {winners.map((winner) => <div className="ranking-paper-winner" key={winner.id}><h3>{winner.name}</h3><strong>{winner.marks} <span>marks · Grade {gradeForMarks(winner.marks)}</span></strong><p>{winner.school}</p></div>)}
           </aside>}
         </div>
         <div className="card-actions">{admin && <button className="secondary-button" onClick={() => edit({ kind: "paper", item })}>Edit</button>}<button className="purchase-button" onClick={() => setActiveId(item.id)}>Open paper</button></div>
@@ -146,7 +153,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
       {editor && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-editor-title">{editor.item ? "Edit" : "Add"} {editor.kind === "paper" ? "paper" : "student result"}</h2><button className="close-button" aria-label="Close editor" disabled={busy} onClick={() => setEditor(null)}><X size={22} /></button></div>
         <form className="module-form" key={`${editor.kind}-${editor.item?.id ?? "new"}`} onSubmit={save}><fieldset disabled={busy}>
           <label>{editor.kind === "paper" ? "Paper name" : "Student name"}<input name="name" required maxLength={200} defaultValue={editor.item?.name} /></label>
-          {editor.kind === "paper" ? <><label>Paper date<input name="date" type="date" required defaultValue={editor.item?.date} /></label><label>Google Drive paper link<input name="drive_url" type="url" maxLength={2000} placeholder="https://drive.google.com/file/d/…/view" defaultValue={editor.item?.drive_url ?? ""} /></label><p className="admin-caption">Optional. Set the file’s Google Drive access to “Anyone with the link” so students can open and download it.</p><label>YouTube answers link<input name="answers_url" type="url" maxLength={2000} placeholder="https://www.youtube.com/watch?v=…" defaultValue={editor.item?.answers_url ?? ""} /></label><p className="admin-caption">Optional. Use a public or unlisted video. Clear either link to remove its student button.</p></> : <><label>Marks<input name="marks" type="number" min="0" max="10000" step="any" required defaultValue={editor.item?.marks} /></label><label>Medium<select name="medium" defaultValue={editor.item?.medium ?? "si"}><option value="si">Sinhala</option><option value="en">English</option></select></label><label>School<input name="school" list="kalutara-schools" autoComplete="off" placeholder="Search or type a school name" required maxLength={200} defaultValue={editor.item?.school} /><datalist id="kalutara-schools">{schoolNames.map((name) => <option key={name} value={name} />)}</datalist></label><p className="admin-caption">Search Kalutara government schools or type another school name.</p></>}
+          {editor.kind === "paper" ? <><label>Paper date<input name="date" type="date" required defaultValue={editor.item?.date} /></label><label>Google Drive paper link<input name="drive_url" type="url" maxLength={2000} placeholder="https://drive.google.com/file/d/…/view" defaultValue={editor.item?.drive_url ?? ""} /></label><p className="admin-caption">Optional. Set the file’s Google Drive access to “Anyone with the link” so students can open and download it.</p><label>YouTube answers link<input name="answers_url" type="url" maxLength={2000} placeholder="https://www.youtube.com/watch?v=…" defaultValue={editor.item?.answers_url ?? ""} /></label><p className="admin-caption">Optional. Use a public or unlisted video. Clear either link to remove its student button.</p></> : <><MarksInput initialMarks={editor.item?.marks} /><label>Medium<select name="medium" defaultValue={editor.item?.medium ?? "si"}><option value="si">Sinhala</option><option value="en">English</option></select></label><label>School<input name="school" list="kalutara-schools" autoComplete="off" placeholder="Search or type a school name" required maxLength={200} defaultValue={editor.item?.school} /><datalist id="kalutara-schools">{schoolNames.map((name) => <option key={name} value={name} />)}</datalist></label><p className="admin-caption">Search Kalutara government schools or type another school name.</p></>}
           {error && <p className="admin-message error" role="alert">{error}</p>}<button className="purchase-button" type="submit">{busy ? "Saving…" : "Save"}</button>
         </fieldset></form>
       </section>}

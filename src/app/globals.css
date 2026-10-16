@@ -354,7 +354,7 @@ button:disabled { opacity: .55; cursor: wait; }
 .ranking-paper-header { gap: 16px; }
 .ranking-paper-resources { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .ranking-resource-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
-.ranking-paper-title { display: grid; gap: 5px; min-width: 0; }
+.ranking-paper-title { display: grid; gap: 5px; min-width: 0; flex: 1 1 200px; }
 .ranking-paper-title time { font-size: 14px; color: #68707b; }
 .ranking-paper-logo { margin-left: auto; width: 190px; height: auto; object-fit: contain; }
 .ranking-podium { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-bottom: 28px; }
@@ -402,10 +402,19 @@ button:disabled { opacity: .55; cursor: wait; }
   .ranking-student-card .ranking-actions { grid-column: 1 / -1; margin-top: 5px; }
   .ranking-actions .secondary-button { min-height: 44px; }
   .rankings .catalog-toolbar > span { display: block; font-size: 12px; }
-  .ranking-paper-header { gap: 10px; }
+  .ranking-paper-header { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+  .ranking-paper-header > .tute-back,
+  .ranking-paper-header > .secondary-button { justify-self: start; }
+  .ranking-paper-resources { width: 100%; min-width: 0; }
+  .ranking-paper-resources:empty { display: none; }
+  .ranking-resource-button { min-height: 44px; max-width: 100%; white-space: normal; }
+  .ranking-resource-button svg { flex-shrink: 0; }
+  .ranking-paper-title time { white-space: nowrap; }
+  .ranking-card-score { flex-wrap: wrap; }
+  .ranking-card-score span { line-height: 1.5; }
   .rankings .ranking-paper-title h2 { font-size: 17px; }
   .ranking-paper-title { flex: 1; }
-  .ranking-paper-logo { width: 100px; }
+  .ranking-paper-logo { width: 130px; max-width: 100%; margin-left: 0; justify-self: end; }
   .ranking-table-scroll { overflow: visible; background: transparent; }
   .ranking-table, .ranking-table tbody { display: block; }
   .ranking-table caption { display: block; padding: 10px 0; font-size: 14px; }
@@ -478,3 +487,6 @@ button:disabled { opacity: .55; cursor: wait; }
 .tute-resource-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
 
 .display-order-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: 12px 24px; }
+
+.navigation-drawer a.nav-item, .mobile-course-menu a.nav-item { text-decoration: none; }
+.section-description { color: #5f6671; line-height: 1.6; margin: 0 0 20px; max-width: 850px; }

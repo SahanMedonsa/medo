@@ -114,3 +114,22 @@ medium. A video can only be assigned to a folder with the same medium.
 Publish the updated `firestore.rules` before saving medium-tagged content:
 `firebase deploy --only firestore:rules --project medonsa`.
 If your CLI session has expired, run `firebase login --reauth` first.
+
+## Search engine setup
+
+The preferred public domain is `https://sahanmedonsa.lk`. Set
+`NEXT_PUBLIC_SITE_URL` before building if you change domains. Public sections
+have crawlable `/learn/...` links, individual metadata and canonical URLs.
+`/student` uses the home page canonical; admin and login pages use `noindex`.
+The sitemap is served at `/sitemap.xml` and advertised in `/robots.txt`.
+
+After deploying, verify `sahanmedonsa.lk` in Google Search Console using DNS,
+or set `GOOGLE_SITE_VERIFICATION` to its HTML verification token and redeploy.
+Submit `https://sahanmedonsa.lk/sitemap.xml` and inspect the home page and a
+`/learn/...` page with URL Inspection. Configure hosting to redirect alternate
+hosts (including www) and HTTP to the preferred HTTPS domain.
+
+Section titles, descriptions and links are rendered in the initial HTML.
+Lesson cards still load from the public API in the browser; individual folders
+and videos do not yet have their own indexable URLs. Indexing and search
+rankings depend on search engines and are not guaranteed by these changes.

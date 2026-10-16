@@ -536,3 +536,11 @@ test("Folder list and individual folder display orders save independently", asyn
   assert.equal(await read("display_pdf_si_folders"), "newest");
   assert.equal((await save("../bad", "oldest")).status, 400);
 });
+
+
+test("Ranking grades use the requested inclusive marks thresholds", async () => {
+  const { gradeForMarks } = await import(await source("../src/lib/rankings.ts", rankingSubstitutions));
+  for (const [marks, grade] of [[0, "W"], [34.99, "W"], [35, "S"], [54.99, "S"], [55, "C"], [64.99, "C"], [65, "B"], [74.99, "B"], [75, "A"], [100, "A"]]) {
+    assert.equal(gradeForMarks(marks), grade);
+  }
+});

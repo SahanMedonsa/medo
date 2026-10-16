@@ -1,5 +1,6 @@
 "use client";
 
+import { publicSections } from "@/lib/seo";
 import { adminRequest, readDemo } from "@/lib/demo-store";
 import YoutubeThumbnail from "@/components/youtube-thumbnail";
 import Image from "next/image";
@@ -55,7 +56,7 @@ function Brand({ compact = false }: { compact?: boolean }) {
   </span>;
 }
 
-export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "admin" }) {
+export default function CourseCatalog({ mode = "public", initialCategory = "2026 O/L Maths" }: { mode?: "public" | "admin"; initialCategory?: string }) {
   const admin = mode === "admin";
 
   const mobileMenu = useRef<HTMLDialogElement>(null);
@@ -79,7 +80,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
   const [folderEditor, setFolderEditor] = useState<{ folder: LessonFolder | null } | null>(null);
   const [notice, setNotice] = useState("");
   const [actionBusy, setActionBusy] = useState(false);
-  const [category, setCategory] = useState("2026 O/L Maths");
+  const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState("");
   const [menuQuery, setMenuQuery] = useState("");
   const [selectedLesson, setSelectedLesson] = useState<VideoModule | null>(null);
@@ -206,7 +207,12 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
               if (!items.length) return null;
               return <div className="nav-category-group" key={group.label || "information"}>
                 {group.label && <h2 className="nav-category-heading">{group.label}</h2>}
-                {items.map(({ id, icon: Icon }) => <button key={id} className={`nav-item ${category === id ? "active" : ""}`} aria-current={category === id ? "page" : undefined} onClick={() => navigate(id)}><Icon size={37} strokeWidth={1.8} /><span>{categoryLabel(id)}</span></button>)}
+                {items.map(({ id, icon: Icon }) => {
+                  const section = publicSections.find((item) => item.category === id);
+                  const className = `nav-item ${category === id ? "active" : ""}`;
+                  const contents = <><Icon size={37} strokeWidth={1.8} /><span>{categoryLabel(id)}</span></>;
+                  return !admin && section ? <Link key={id} href={`/learn/${section.slug}`} className={className} aria-current={category === id ? "page" : undefined} onClick={() => { setMenuOpen(false); setMenuQuery(""); }}>{contents}</Link> : <button key={id} className={className} aria-current={category === id ? "page" : undefined} onClick={() => navigate(id)}>{contents}</button>;
+                })}
               </div>;
             })}
             {!categoryGroups.some((group) => group.items.some((item) => `${group.label} ${categoryLabel(item.id)}`.toLowerCase().includes(menuQuery.trim().toLowerCase()))) && <p className="menu-empty">No matching sections.</p>}
@@ -234,6 +240,7 @@ export default function CourseCatalog({ mode = "public" }: { mode?: "public" | "
       </dialog>
       <main className="main-content">
         {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
+        {!admin && !activeFolder && <p className="section-description">{publicSections.find((section) => section.category === category)?.description}</p>}
         {admin && isCourse && category !== "Tutes" && (["Ranking", "O/L Online Classes", "A/L Online Classes"].includes(category) ? <DisplayOrder setting={displayOrder} demo={demo} /> : <div className="display-order-controls">{activeFolderId ? <DisplayOrder label="Video order in this folder" setting={videoOrder} demo={demo} /> : <DisplayOrder label="Folder order" setting={displayOrder} demo={demo} />}</div>)}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
         {loadError && !["2026 O/L Maths", "Grade 10", "#tute", "AL Video Modules", "A/L Past Papers", "O/L Past Papers"].includes(category) && <p role="alert">{loadError}</p>}
