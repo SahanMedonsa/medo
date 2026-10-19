@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: { default: "Sahan Medonsa", template: "%s | Sahan Medonsa" },
   description: siteDescription,
   applicationName: "Sahan Medonsa",
+  icons: { icon: { url: "/me.png", type: "image/png" }, apple: "/logo.png" },
   authors: [{ name: "Sahan Medonsa" }],
   openGraph: {
     type: "website", siteName: "Sahan Medonsa", title: "Sahan Medonsa", description: siteDescription,
