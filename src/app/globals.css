@@ -492,3 +492,12 @@ button:disabled { opacity: .55; cursor: wait; }
 .display-order-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: 12px 24px; }
 
 .navigation-drawer a.nav-item, .mobile-course-menu a.nav-item { text-decoration: none; }
+
+.ranking-passcode { display: grid; gap: 12px; }
+.ranking-passcode > span { font-weight: 700; }
+.ranking-passcode-digits { display: grid; grid-template-columns: repeat(4, minmax(0, 64px)); gap: 12px; }
+.module-form .ranking-passcode-digits input { width: 100%; min-width: 0; height: 64px; padding: 8px; text-align: center; font-size: 26px; border-radius: 12px; }
+@media (max-width: 400px) {
+  .ranking-passcode-digits { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .module-form .ranking-passcode-digits input { height: 56px; }
+}

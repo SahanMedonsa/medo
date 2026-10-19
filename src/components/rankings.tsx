@@ -13,6 +13,27 @@ type Editor = { kind: "paper"; item?: RankingPaper } | { kind: "entry"; item?: R
 const demoKey = "medonsa-demo-rankings";
 function readDemo(): Data { return JSON.parse(localStorage.getItem(demoKey) || '{"papers":[],"entries":[]}'); }
 
+function PasscodeInput() {
+  const [digits, setDigits] = useState(["", "", "", ""]);
+  const inputs = useRef<(HTMLInputElement | null)[]>([]);
+  function fill(index: number, value: string) {
+    const numbers = value.replace(/[^0-9]/g, "").slice(0, 4);
+    if (!numbers) { setDigits((current) => current.map((digit, position) => position === index ? "" : digit)); return; }
+    const start = numbers.length === 4 ? 0 : index;
+    setDigits((current) => {
+      const next = [...current];
+      for (let offset = 0; offset < numbers.length && start + offset < 4; offset++) next[start + offset] = numbers[offset];
+      return next;
+    });
+    inputs.current[Math.min(start + numbers.length, 3)]?.focus();
+  }
+  return <div className="ranking-passcode"><span id="ranking-passcode-label">4-digit passcode</span><input type="hidden" name="passcode" value={digits.join("")} /><div className="ranking-passcode-digits" role="group" aria-labelledby="ranking-passcode-label">{digits.map((digit, index) => <input key={index} ref={(element) => { inputs.current[index] = element; }} type="password" inputMode="numeric" pattern="[0-9]" required aria-label={`Digit ${index + 1} of 4`} autoComplete={index === 0 ? "one-time-code" : "off"} value={digit} onFocus={(event) => event.currentTarget.select()} onChange={(event) => fill(index, event.target.value)} onPaste={(event) => { event.preventDefault(); fill(index, event.clipboardData.getData("text")); }} onKeyDown={(event) => {
+    if (event.key === "Backspace" && !digit && index > 0) { event.preventDefault(); setDigits((current) => current.map((value, position) => position === index - 1 ? "" : value)); inputs.current[index - 1]?.focus(); }
+    if (event.key === "ArrowLeft" && index > 0) { event.preventDefault(); inputs.current[index - 1]?.focus(); }
+    if (event.key === "ArrowRight" && index < 3) { event.preventDefault(); inputs.current[index + 1]?.focus(); }
+  }} />)}</div></div>;
+}
+
 function MarksInput({ initialMarks }: { initialMarks?: number }) {
   const [value, setValue] = useState(initialMarks === undefined ? "" : String(initialMarks));
   const marks = Number(value);
@@ -191,7 +212,7 @@ export default function Rankings({ admin, demo, contentOrder }: { contentOrder?:
       </article>;
     })}</div>{!data.papers.length && !error && <p className="admin-caption">{admin ? "Add a paper name and date to get started." : "Paper rankings will appear here when added."}</p>}</>}
     <dialog ref={unlockDialog} className="video-editor-dialog" aria-labelledby="ranking-unlock-title" onCancel={(event) => { if (busy) event.preventDefault(); else setUnlockPaper(null); }}>
-      {unlockPaper && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-unlock-title">Open {unlockPaper.name}</h2><button className="close-button" aria-label="Close passcode prompt" disabled={busy} onClick={() => setUnlockPaper(null)}><X size={22} /></button></div><form key={unlockPaper.id} className="module-form" onSubmit={unlock}><fieldset disabled={busy}><label>4-digit passcode<input name="passcode" type="password" inputMode="numeric" pattern="[0-9]{4}" minLength={4} maxLength={4} required autoComplete="off" /></label>{error && <p role="alert">{error}</p>}<button className="purchase-button" type="submit">{busy ? "Checking…" : "Open results"}</button></fieldset></form></section>}
+      {unlockPaper && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-unlock-title">Open {unlockPaper.name}</h2><button className="close-button" aria-label="Close passcode prompt" disabled={busy} onClick={() => setUnlockPaper(null)}><X size={22} /></button></div><form key={unlockPaper.id} className="module-form" onSubmit={unlock}><fieldset disabled={busy}><PasscodeInput />{error && <p role="alert">{error}</p>}<button className="purchase-button" type="submit">{busy ? "Checking…" : "Open results"}</button></fieldset></form></section>}
     </dialog>
     <dialog ref={dialog} className="video-editor-dialog" aria-labelledby="ranking-editor-title" onCancel={(event) => { if (busy) event.preventDefault(); else setEditor(null); }}>
       {editor && <section className="admin-panel"><div className="editor-heading"><h2 id="ranking-editor-title">{editor.item ? "Edit" : "Add"} {editor.kind === "paper" ? "paper" : "student result"}</h2><button className="close-button" aria-label="Close editor" disabled={busy} onClick={() => setEditor(null)}><X size={22} /></button></div>
