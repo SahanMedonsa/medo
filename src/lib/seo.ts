@@ -22,3 +22,30 @@ export const publicSections = [
   { slug: "about", category: "About Us", title: "About Sahan Medonsa", description: "Meet Sahan Medonsa, an IT lecturer and software developer with a BSc (Hons) in Information Technology, sharing lessons and practical learning resources." },
   { slug: "contact", category: "Contact Us", title: "Contact Sahan Medonsa", description: "Contact Sahan Medonsa by phone or WhatsApp for questions about lessons, learning materials and projects." },
 ];
+
+export function socialMetadata(title: string, description: string, path: string) {
+  const origin = siteUrl()!;
+  const image = new URL("/logo.png", origin).href;
+  return {
+    openGraph: {
+      type: "website" as const, siteName: "Sahan Medonsa", title, description,
+      url: new URL(path, origin).href,
+      images: [{ url: image, width: 1175, height: 344, alt: "Sahan Medonsa" }],
+    },
+    twitter: { card: "summary_large_image" as const, title, description, images: [image] },
+  };
+}
+
+export function structuredSiteData() {
+  const origin = siteUrl()!;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "@id": new URL("/#website", origin).href, name: "Sahan Medonsa", url: origin.href,
+        description: siteDescription, inLanguage: ["en", "si"], publisher: { "@id": new URL("/#person", origin).href } },
+      { "@type": "Person", "@id": new URL("/#person", origin).href, name: "Sahan Medonsa", url: new URL("/learn/about", origin).href,
+        jobTitle: "IT Lecturer and Software Developer", image: new URL("/me.png", origin).href,
+        sameAs: ["https://youtube.com/@sahanmedonsa", "https://www.tiktok.com/@sahanmedonsa"] },
+    ],
+  };
+}

@@ -492,4 +492,3 @@ button:disabled { opacity: .55; cursor: wait; }
 .display-order-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: 12px 24px; }
 
 .navigation-drawer a.nav-item, .mobile-course-menu a.nav-item { text-decoration: none; }
-.section-description { color: #5f6671; line-height: 1.6; margin: 0 0 20px; max-width: 850px; }

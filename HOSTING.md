@@ -129,7 +129,7 @@ Submit `https://sahanmedonsa.lk/sitemap.xml` and inspect the home page and a
 `/learn/...` page with URL Inspection. Configure hosting to redirect alternate
 hosts (including www) and HTTP to the preferred HTTPS domain.
 
-Section titles, descriptions and links are rendered in the initial HTML.
+Section titles and navigation links are rendered in the initial HTML. Descriptions are included in page metadata.
 Lesson cards still load from the public API in the browser; individual folders
 and videos do not yet have their own indexable URLs. Indexing and search
 rankings depend on search engines and are not guaranteed by these changes.

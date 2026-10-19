@@ -259,7 +259,6 @@ export default function CourseCatalog({ mode = "public", initialCategory = "2026
       </dialog>
       <main className="main-content">
         {category !== "Tutes" && <h1 className="category-title">{activeFolder?.title ?? categoryLabel(category)}</h1>}
-        {!admin && !activeFolder && <p className="section-description">{publicSections.find((section) => section.category === category)?.description}</p>}
         {admin && isCourse && category !== "Tutes" && (["Ranking", "O/L Online Classes", "A/L Online Classes"].includes(category) ? <DisplayOrder setting={displayOrder} demo={demo} /> : <div className="display-order-controls">{activeFolderId ? <DisplayOrder label="Video order in this folder" setting={videoOrder} demo={demo} /> : <DisplayOrder label="Folder order" setting={displayOrder} demo={demo} />}</div>)}
         {demo && <p className="demo-notice">Frontend demo · No login needed. Changes are saved in this browser only.</p>}
         {loadError && !["2026 O/L Maths", "Grade 10", "#tute", "AL Video Modules", "A/L Past Papers", "O/L Past Papers"].includes(category) && <p role="alert">{loadError}</p>}
