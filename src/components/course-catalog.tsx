@@ -64,12 +64,31 @@ export default function CourseCatalog({ mode = "public", initialCategory = "2026
   useEffect(() => {
     if (!menuOpen) { mobileMenu.current?.close(); return; }
     mobileMenu.current?.showModal();
-    const previous = document.body.style.overflow;
+    const scrollY = window.scrollY;
+    const previous = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      rootOverflow: document.documentElement.style.overflow,
+    };
+    document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
-    const media = window.matchMedia("(min-width: 761px)");
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    const media = window.matchMedia("(min-width: 1367px)");
     const closeOnDesktop = () => { if (media.matches) setMenuOpen(false); };
     media.addEventListener("change", closeOnDesktop);
-    return () => { document.body.style.overflow = previous; media.removeEventListener("change", closeOnDesktop); };
+    return () => {
+      document.body.style.overflow = previous.overflow;
+      document.body.style.position = previous.position;
+      document.body.style.top = previous.top;
+      document.body.style.width = previous.width;
+      document.documentElement.style.overflow = previous.rootOverflow;
+      window.scrollTo({ top: scrollY, behavior: "instant" });
+      media.removeEventListener("change", closeOnDesktop);
+    };
   }, [menuOpen]);
   const [medium, setMedium] = useState<Medium>("si");
   const [demo, setDemo] = useState(false);
