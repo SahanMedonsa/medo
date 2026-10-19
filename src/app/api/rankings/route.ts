@@ -1,11 +1,20 @@
+import { randomBytes, scryptSync } from "node:crypto";
 import { ApiError, apiError, assertSameOrigin, backend, json, requireAdmin } from "@/lib/backend";
 import { rankingId, validateRankingEntry, validateRankingPaper } from "@/lib/rankings";
 
-export async function GET() {
+export async function GET(request?: Request) {
   try {
-    const [papers, entries] = await Promise.all([backend("/data/ranking_papers"), backend("/data/ranking_entries")]);
-    if (!papers.ok || !entries.ok) throw new ApiError("Could not load rankings. Publish the updated Firestore rules.", 503);
-    return json({ papers: await papers.json(), entries: await entries.json() });
+    const admin = request && new URL(request.url).searchParams.get("admin") === "true";
+    const token = admin ? (await requireAdmin()).token : undefined;
+    const papers = await backend("/data/ranking_papers", token);
+    if (!papers.ok) throw new ApiError("Could not load rankings. Publish the updated Firestore rules.", 503);
+    let entries = [];
+    if (admin) {
+      const response = await backend("/data/ranking_entries", token);
+      if (!response.ok) throw new ApiError("Could not load student results.", 503);
+      entries = await response.json();
+    }
+    return json({ papers: await papers.json(), entries });
   } catch (error) { return apiError(error); }
 }
 async function save(request: Request, method: "POST" | "PATCH") {
@@ -19,6 +28,7 @@ async function save(request: Request, method: "POST" | "PATCH") {
       body = JSON.parse(raw);
       if (!body || !["paper", "entry"].includes(body.kind)) throw new Error("Choose a paper or student result.");
       if (method === "PATCH") rankingId(body.id);
+      if (body.kind === "paper" && body.passcode !== undefined && body.passcode !== "" && (typeof body.passcode !== "string" || !/^[0-9]{4}$/.test(body.passcode))) throw new Error("Enter a 4-digit passcode.");
       value = body.kind === "paper" ? validateRankingPaper(body) : validateRankingEntry(body);
     } catch (error) { throw new ApiError((error as Error).message); }
     if (body.kind === "entry") {
@@ -29,7 +39,14 @@ async function save(request: Request, method: "POST" | "PATCH") {
     const collection = body.kind === "paper" ? "ranking_papers" : "ranking_entries";
     const response = await backend(`/data/${collection}${method === "PATCH" ? `?id=eq.${body.id}` : ""}`, token, { method, body: JSON.stringify(value) });
     if (!response.ok) throw new ApiError("Could not save ranking. Check Firestore rules and try again.", 502);
-    return json({ item: (await response.json())[0] });
+    const item = (await response.json())[0];
+    if (body.kind === "paper" && body.passcode) {
+      const salt = randomBytes(16).toString("hex");
+      const hash = scryptSync(body.passcode, salt, 32).toString("hex");
+      const access = await backend(`/data/ranking_access?id=eq.${item.id}`, token, { method: "PUT", body: JSON.stringify({ salt, hash }) });
+      if (!access.ok) throw new ApiError("Paper saved, but its passcode could not be saved. Publish the updated rules and edit the paper to set its passcode.", 502);
+    }
+    return json({ item });
   } catch (error) { return apiError(error); }
 }
 export async function POST(request: Request) { return save(request, "POST"); }

@@ -544,3 +544,43 @@ test("Ranking grades use the requested inclusive marks thresholds", async () => 
     assert.equal(gradeForMarks(marks), grade);
   }
 });
+
+test("Ranking unlock checks 4 digits on the server before returning only the requested results", async (t) => {
+  const { scryptSync } = await import("node:crypto");
+  const unlockBackend = "data:text/javascript;base64," + Buffer.from(`export { ApiError, apiError, assertSameOrigin, json } from ${JSON.stringify(backendUrl)}; export async function backend(path) { if (path.startsWith("/data/ranking_access")) return globalThis.rankingAccess(path); return Response.json(await globalThis.rankingResults(${JSON.stringify(uuid)})); }`).toString("base64");
+  const rankingsUrl = await source("../src/lib/rankings.ts", rankingSubstitutions);
+  const unlock = await import(await source("../src/app/api/rankings/unlock/route.ts", { ...substitutions, '"@/lib/rankings"': JSON.stringify(rankingsUrl), '"@/lib/backend"': JSON.stringify(unlockBackend) }));
+  let reads = 0;
+  const salt = "a".repeat(32);
+  globalThis.rankingAccess = async (path) => {
+    assert.equal(path, "/data/ranking_access?id=eq." + uuid);
+    return Response.json([{ salt, hash: scryptSync("0123", salt, 32).toString("hex") }]);
+  };
+  globalThis.rankingResults = async (paperId) => { reads++; assert.equal(paperId, uuid); return [{ paper_id: paperId, name: "Student", marks: 75 }]; };
+  t.after(() => { delete globalThis.rankingAccess; delete globalThis.rankingResults; });
+  const request = (passcode, origin = "http://localhost:3000") => new Request("http://localhost:3000/api/rankings/unlock", { method: "POST", headers: { Origin: origin }, body: JSON.stringify({ paper_id: uuid, passcode }) });
+  assert.equal((await unlock.POST(request("0123", "https://other.test"))).status, 403);
+  for (const code of [123, "123", "abcd", "12345"]) assert.equal((await unlock.POST(request(code))).status, 400);
+  assert.equal((await unlock.POST(request("9999"))).status, 403);
+  assert.equal(reads, 0);
+  const response = await unlock.POST(request("0123"));
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).entries[0].marks, 75);
+  assert.equal(reads, 1);
+  for (let i = 0; i < 8; i++) await unlock.POST(request("9999"));
+  assert.equal((await unlock.POST(request("0123"))).status, 429);
+});
+
+test("Public ranking list never queries private student results", async (t) => {
+  const original = globalThis.fetch;
+  t.after(() => { globalThis.fetch = original; });
+  const rankingsUrl = await source("../src/lib/rankings.ts", rankingSubstitutions);
+  const route = await import(await source("../src/app/api/rankings/route.ts", { ...substitutions, '"@/lib/rankings"': JSON.stringify(rankingsUrl) }));
+  globalThis.fetch = async (_url, options) => {
+    assert.equal(JSON.parse(options.body).structuredQuery.from[0].collectionId, "ranking_papers");
+    return Response.json([{ document: { name: "ranking_papers/" + uuid, fields: encodeFields({ name: "Paper", answers_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }) } }]);
+  };
+  const data = await (await route.GET()).json();
+  assert.equal(data.papers.length, 1);
+  assert.deepEqual(data.entries, []);
+});

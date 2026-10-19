@@ -133,3 +133,15 @@ Section titles and navigation links are rendered in the initial HTML. Descriptio
 Lesson cards still load from the public API in the browser; individual folders
 and videos do not yet have their own indexable URLs. Indexing and search
 rankings depend on search engines and are not guaranteed by these changes.
+
+## Ranking paper number prompt
+
+Publish the updated Firestore rules and redeploy. No service-account key or
+`FIREBASE_SERVICE_ACCOUNT_JSON` is needed. Admins set a 4-digit code in
+Add/Edit paper; leave it blank when editing to keep the existing code.
+Codes already saved continue to work. Students enter the code to open results.
+Paper download and answers video links remain on the folder card.
+
+This is a basic folder-opening prompt, not private access control. Ranking
+entries and code verification hashes are publicly readable through Firestore.
+Admin authentication is still required to change codes and results.

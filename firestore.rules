@@ -89,6 +89,15 @@ service cloud.firestore {
         && request.resource.data.created_at == resource.data.created_at;
       allow delete: if false;
     }
+    match /ranking_access/{id} {
+      allow get: if true;
+      allow create, update: if admin()
+        && request.resource.data.keys().hasAll(['salt', 'hash'])
+        && request.resource.data.keys().hasOnly(['salt', 'hash'])
+        && request.resource.data.salt is string && request.resource.data.salt.matches('[0-9a-f]{32}')
+        && request.resource.data.hash is string && request.resource.data.hash.matches('[0-9a-f]{64}');
+      allow list, delete: if false;
+    }
     match /ranking_entries/{id} {
       function validEntry(data) {
         return data.keys().hasAll(['paper_id', 'name', 'school', 'marks', 'created_at'])
