@@ -1,7 +1,7 @@
 import { googleDriveFileUrl } from "./pdfs";
 import { youtubeId } from "./modules";
 
-export type RankingPaper = { id: string; name: string; date: string; created_at: string; drive_url?: string; answers_url?: string };
+export type RankingPaper = { id: string; name: string; date: string; created_at: string; drive_url?: string; answers_url?: string; answers_2_url?: string };
 export type RankingEntry = { id: string; paper_id: string; name: string; school: string; medium?: "si" | "en"; marks: number; created_at: string };
 export function rankingId(value: unknown): asserts value is string {
   if (typeof value !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) throw new Error("Invalid ranking ID.");
@@ -26,7 +26,16 @@ export function validateRankingPaper(data: Record<string, unknown>) {
       answers_url = `https://www.youtube.com/watch?v=${id}`;
     }
   }
-  return { name, date: data.date, drive_url, answers_url };
+  let answers_2_url = "";
+  if (data.answers_2_url !== undefined) {
+    if (typeof data.answers_2_url !== "string" || data.answers_2_url.length > 2000) throw new Error("Paste a YouTube Paper 2 answers link.");
+    if (data.answers_2_url.trim()) {
+      const id = youtubeId(data.answers_2_url.trim());
+      if (!id) throw new Error("Enter a valid YouTube Paper 2 answers video link.");
+      answers_2_url = `https://www.youtube.com/watch?v=${id}`;
+    }
+  }
+  return { name, date: data.date, drive_url, answers_url, answers_2_url };
 }
 export function validateRankingEntry(data: Record<string, unknown>) {
   rankingId(data.paper_id);

@@ -306,7 +306,7 @@ test("Folder API requires admin, saves metadata, and rejects missing parent fold
 
 test("Rankings validate paper dates and student results and give tied marks equal ranks", async () => {
   const { validateRankingPaper, validateRankingEntry, rankStudents } = await import(await source("../src/lib/rankings.ts", rankingSubstitutions));
-  assert.deepEqual(validateRankingPaper({ name: " Paper 1 ", date: "2026-10-01" }), { name: "Paper 1", date: "2026-10-01", drive_url: "", answers_url: "" });
+  assert.deepEqual(validateRankingPaper({ name: " Paper 1 ", date: "2026-10-01" }), { name: "Paper 1", date: "2026-10-01", drive_url: "", answers_url: "", answers_2_url: "" });
   for (const date of ["2026-02-30", "bad", "2026-13-01"]) assert.throws(() => validateRankingPaper({ name: "Paper", date }));
   const validEntry = { paper_id: uuid, name: "Student", school: "School", marks: 89.5 };
   assert.equal(validateRankingEntry(validEntry).marks, 89.5);
@@ -583,4 +583,15 @@ test("Public ranking list never queries private student results", async (t) => {
   const data = await (await route.GET()).json();
   assert.equal(data.papers.length, 1);
   assert.deepEqual(data.entries, []);
+});
+
+
+test("Ranking papers support two independent YouTube answer links", async () => {
+  const { validateRankingPaper } = await import(await source("../src/lib/rankings.ts", rankingSubstitutions));
+  const paper = { name: "Paper", date: "2026-10-25", answers_url: "https://youtu.be/dQw4w9WgXcQ", answers_2_url: "https://youtu.be/abcdefghijk" };
+  const saved = validateRankingPaper(paper);
+  assert.equal(saved.answers_url, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+  assert.equal(saved.answers_2_url, "https://www.youtube.com/watch?v=abcdefghijk");
+  assert.equal(validateRankingPaper({ ...paper, answers_2_url: "" }).answers_2_url, "");
+  for (const answers_2_url of [123, "javascript:alert(1)", "https://youtube.com.evil.test/watch?v=abcdefghijk"]) assert.throws(() => validateRankingPaper({ ...paper, answers_2_url }));
 });
